@@ -1,0 +1,11 @@
+@using IMRepo.Models.Domain;
+@model ProjectVideo
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleCreate, ModelsTexts.ProjectVideo.title);
+    ViewData["Action"] = "Create";
+    ViewData["UpdateAvailable"] = true;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/ProjectVideo/_PartialCapture.cshtml", ViewData)

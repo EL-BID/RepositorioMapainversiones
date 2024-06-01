@@ -1,0 +1,50 @@
+@using IMRepo.Models.Domain;
+@model FundingAgency
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.FundingAgency.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormFundingAgency" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE FUNDINGAGENCY PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.FundingAgency.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divAcronym">
+                <label asp-for="Acronym" class="control-label" title=@ModelsTexts.FundingAgency.AcronymDescription></label>
+                <input asp-for="Acronym" type="text" >
+                <span asp-validation-for="Acronym" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture fundingagency properties -->
+    <span data-model="FundingAgency"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of fundingagency form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display FundingAgency *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Name').disabled = x;
+    document.getElementById('Acronym').disabled = x;
+</script>

@@ -1,0 +1,12 @@
+@using IMRepo.Models.Domain;
+@model FundingType
+@{
+    ViewData["ModelId"] = Model.Id;
+    ViewData["DeleteAvailable"] = true;
+    ViewData["Title"] = string.Format(JaosUITitles.titleEdit, ModelsTexts.FundingType.title);
+    ViewData["Action"] = "Edit";
+    ViewData["UpdateAvailable"] = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/FundingType/_PartialCapture.cshtml", ViewData)

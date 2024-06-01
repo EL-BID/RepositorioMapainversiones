@@ -1,0 +1,81 @@
+﻿@using IMRepo.Models.Domain;
+@using JaosLib.Models.JaoTables
+@model List<Addition>
+@{
+    Layout = "_ApprovalLayout";
+    ViewBag.navAddition = "active";
+}
+
+
+
+
+
+
+@if (Model?.Count > 0)
+{
+    <h4 class="mb-4">Adiciones pendientes de aprobación</h4>
+
+    <table>
+        <thead>
+            <tr>
+                @if (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin))
+                {
+                    <th></th>
+                }
+                <th>@Html.DisplayNameForInnerType((Product p) => p.Project_info)</th>
+                <th>@Html.DisplayNameForInnerType((Addition a) => a.Product_info)</th>
+                <th>@Html.DisplayNameForInnerType((Addition a) => a.DateDelivery)</th>
+                <th class=@JaoTable.classNumber>@Html.DisplayNameForInnerType((Addition a) => a.Value)</th>
+                <th>@Html.DisplayNameForInnerType((Addition a) => a.Stage)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Addition addition in Model)
+            {
+                <tr>
+                    @if (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin))
+                    {
+                        <td title="modificar">
+                            <a asp-route-id="@addition.Id" asp-area="" asp-controller="Addition" asp-action="Edit" class="btn btn-clear"><i class="bi-pencil"></i></a>
+                        </td>
+                    }
+                    <td>
+                        @if (addition.Product_info?.Project_info?.Id > 0)
+                        {
+                            @addition.Product_info.Project_info.Name
+                        }
+                    </td>
+                    <td>
+                        @if (addition.Product_info?.Id > 0)
+                        {
+                            @addition.Product_info?.Name
+                        }
+                    </td>
+                    <td>
+                        @if (addition.DateDelivery != DateTime.MinValue)
+                        {
+                            @addition.DateDelivery?.ToString("yyyy-MMM-dd")
+                        }
+                    </td>
+                    <td class=@JaoTable.classNumber>
+                        @if (addition.Value > 0)
+                        {
+                            @addition.Value?.ToString("n0")
+                        }
+                    </td>
+                    <td>
+                        @if (addition.Stage_info != null)
+                        {
+                            <span>@addition.Stage_info.Name</span>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encuentran Adiciones pendientes de aprobación.</p>
+}

@@ -1,0 +1,185 @@
+@using IMRepo.Models.Domain;
+@model Extension
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Extension.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormExtension" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl"enctype="multipart/form-data">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE EXTENSION PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divCode">
+                <label asp-for="Code" class="control-label" title=@ModelsTexts.Extension.CodeDescription></label>
+                <input asp-for="Code" type="text"  readonly>
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divDays">
+                <label asp-for="Days" class="control-label" title=@ModelsTexts.Extension.DaysDescription></label>
+                @Html.TextBoxFor(m => m.Days, "{0:d}")
+                <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divStage">
+                <label asp-for="Stage" class="control-label" title=@ModelsTexts.Extension.StageDescription></label>
+                <select asp-for="Stage" name="Stage" class="form-select" asp-items="ViewBag.listStage" id="Stage"></select>
+                <span asp-validation-for="Stage" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="group-fields">
+        <div class="row">
+            <div class="col-sm-6">
+                <div  class="form-control"id="divDateDelivery">
+                    <label asp-for="DateDelivery" class="control-label" title=@ModelsTexts.Extension.DateDeliveryDescription></label>
+                    <input asp-for="DateDelivery" type="date" >
+                    <span asp-validation-for="DateDelivery" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div  class="form-control"id="divDateApproved">
+                    <label asp-for="DateApproved" class="control-label" title=@ModelsTexts.Extension.DateApprovedDescription></label>
+                    <input asp-for="DateApproved" type="date" >
+                    <span asp-validation-for="DateApproved" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divMotive">
+                <label asp-for="Motive" class="control-label" title=@ModelsTexts.Extension.MotiveDescription></label>
+                <input asp-for="Motive" type="text" >
+                <span asp-validation-for="Motive" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div class="form-control" id="divAttachment">
+                <label asp-for="Attachment"  class="control-label"title=@ModelsTexts.Extension.AttachmentDescription></label>
+                @if (string.IsNullOrEmpty(Model.Attachment))
+                {
+                    <input hidden id="AttachmentInput" asp-for="AttachmentInput" type="file" />
+                    <div class="input-group mb-3">
+                        <label id="AttachmentButton" asp-for="AttachmentInput" class="btn btn-outline-secondary" type="button"><i class="bi bi-upload"></i>&nbsp; Cargar Archivo</label>
+                        <input readonly id="Attachment" asp-for="Attachment" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    </div>
+                }
+                else
+                {
+                    <input hidden id="Attachment" asp-for="Attachment" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    <div class="input-group mb-3">
+                        <a class="btn btn-link" asp-area="" asp-controller="Extension" asp-action="Download" asp-route-serverFileName="@Model.Attachment" asp-route-downloadName=@ModelsTexts.Extension.AttachmentTitle asp-route-projectId=@ViewBag.projectId>
+                            <i class="bi-download"></i>&nbsp; Descargar
+                        </a>
+                    </div>
+                }
+                <span asp-validation-for="Attachment" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    </div>
+    <!-- capture extension properties -->
+    <span data-model="Extension"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of extension form -->
+@if ((int)(ViewData["ModelId"] ?? 0) > 0)
+{
+    <hr class="mb-5 mt-5" />
+    <div class="row mb-5">
+        <div class="col-12 col-sm-12 col-lg-10 col-xl-8">
+            <div class="group-children">
+                <h4>ModelsTexts.Extension.AttachmentsTitle</h4>
+
+                <!-- select ExtensionAttachment table -->
+                <table class="table select-table">
+                    <caption>Tabla para seleccionar Anexo Extensión</caption>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameForInnerType((ExtensionAttachment s) => s.Title) <i class=@ViewBag.titleIcon></i>
+                            </th>
+                            <th>
+                                Descargar
+                            </th>
+                            <th>
+                                @Html.DisplayNameForInnerType((ExtensionAttachment s) => s.DateAttached) <i class=@ViewBag.dateAttachedIcon></i>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ExtensionAttachments?.Count() > 0)
+                        {
+                            @foreach (var extensionAttachment in Model.ExtensionAttachments)
+                            {
+                                <tr>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => extensionAttachment.Title)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="ExtensionAttachment" asp-action="Download" asp-route-serverFileName="@extensionAttachment.FileName" asp-route-downloadName="@extensionAttachment.Title" asp-route-extensionId=@ViewBag.extensionId class="btn btn-link">
+                                            <i class="bi-download"></i>
+                                        </a>
+                                    </td>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => extensionAttachment.DateAttached)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="ExtensionAttachment" asp-action="Edit" asp-route-id="@extensionAttachment.Id" asp-route-extensionId=@ViewBag.extensionId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                            <i class="bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Extension *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Code').disabled = x;
+    document.getElementById('Project').disabled = x;
+    document.getElementById('Days').disabled = x;
+    document.getElementById('Stage').disabled = x;
+    document.getElementById('DateDelivery').disabled = x;
+    document.getElementById('DateApproved').disabled = x;
+    document.getElementById('Motive').disabled = x;
+    document.getElementById('Attachment').disabled = x;
+    document.getElementById('Attachments').disabled = x;
+</script>
+<!-- Attachments Manager for Extension -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set listeners to display filename and button title.
+        setListeners('AttachmentInput', 'Attachment', 'AttachmentButton');
+    });
+</script>

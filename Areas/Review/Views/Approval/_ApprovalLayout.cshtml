@@ -1,0 +1,46 @@
+﻿@using IMRepo.Models.Domain;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Aprobaciones pendientes";
+}
+
+@if (this.User.IsInRole(ProjectGlobals.RoleDireccion) || this.User.IsInRole(ProjectGlobals.RoleOperacion) || this.User.IsInRole(ProjectGlobals.RoleAdmin))
+{
+    <form class="mb-5">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link @ViewBag.navPayment" asp-area="Review" asp-controller="Approval" asp-action="Payments">@ModelsTexts.Payment.titlePlural</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @ViewBag.navAddition" asp-area="Review" asp-controller="Approval" asp-action="Additions">@ModelsTexts.Addition.titlePlural</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @ViewBag.navExtension" asp-area="Review" asp-controller="Approval" asp-action="Extensions">@ModelsTexts.Extension.titlePlural</a>
+            </li>
+        </ul>
+    </form>
+}
+
+@RenderBody()
+
+
+@* For other Users Different from PEU
+    <form>
+    <section class="section">
+        <div class="container">
+            <button type="submit" class="btn btn-basic" asp-area="" asp-action="Edit" asp-controller="Project">Edit Project Info.</button>
+            @if (User.IsInRole(ProjectGlobals.RoleAdmin))
+            {
+                <button type="submit" class="btn btn-basic" asp-area="" asp-action="Index" asp-controller="Funding">Funding</button>
+                <button type="submit" class="btn btn-basic" asp-area="Review" asp-action="Capture" asp-controller="Disburse">Disbursements</button>
+                <button type="submit" class="btn btn-basic" asp-area="Review" asp-action="Capture" asp-controller="Expendit">Expenditure</button>
+                <button type="submit" class="btn btn-basic" asp-area="" asp-action="Index" asp-controller="Report">Reports</button>
+            }
+        </div>
+    </section>
+</form>
+*@
+
+
+@await RenderSectionAsync("Scripts", required: false)
+

@@ -1,0 +1,9 @@
+@model IMRepo.Models.Domain.Agency
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.Agency.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/Agency/_PartialCapture.cshtml", ViewData)

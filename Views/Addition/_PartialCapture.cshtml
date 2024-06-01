@@ -1,0 +1,199 @@
+@using IMRepo.Models.Domain;
+@model Addition
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Addition.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormAddition" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl"enctype="multipart/form-data">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE ADDITION PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divCode">
+                <label asp-for="Code" class="control-label" title=@ModelsTexts.Addition.CodeDescription></label>
+                <input asp-for="Code" type="text"  readonly>
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divProduct">
+                <label asp-for="Product" class="control-label" title=@ModelsTexts.Addition.ProductDescription></label>
+                @if (((int?)@ViewBag.productId) != null && ((int?)@ViewBag.productId).Value > 0)
+                {
+                    @Html.HiddenFor(m => m.Product)
+                    <select disabled asp-for="Product" name="Product" class="form-select" asp-items="ViewBag.listProduct" id="Product"></select>
+                }
+                else
+                {
+                    <select asp-for="Product" name="Product" class="form-select" asp-items="ViewBag.listProduct" id="Product"></select>
+                }
+                <span asp-validation-for="Product" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divValue">
+                <label asp-for="Value" class="control-label" title=@ModelsTexts.Addition.ValueDescription></label>
+                @Html.TextBoxFor(m => m.Value, "{0:n2}", new { @onchange = "formatNumber(this,2);" })
+                <span class="text-danger">@ViewBag.ValueValidationMsg</span>
+            </div>
+        </div>
+    </div>
+    <div class="group-fields">
+        <div class="row">
+            <div class="col-sm-4">
+                <div  class="form-control"id="divStage">
+                    <label asp-for="Stage" class="control-label" title=@ModelsTexts.Addition.StageDescription></label>
+                    <select asp-for="Stage" name="Stage" class="form-select" asp-items="ViewBag.listStage" id="Stage"></select>
+                    <span asp-validation-for="Stage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div  class="form-control"id="divDateDelivery">
+                    <label asp-for="DateDelivery" class="control-label" title=@ModelsTexts.Addition.DateDeliveryDescription></label>
+                    <input asp-for="DateDelivery" type="date" >
+                    <span asp-validation-for="DateDelivery" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div  class="form-control"id="divDateApproved">
+                    <label asp-for="DateApproved" class="control-label" title=@ModelsTexts.Addition.DateApprovedDescription></label>
+                    <input asp-for="DateApproved" type="date" >
+                    <span asp-validation-for="DateApproved" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divNotes">
+                <label asp-for="Notes" class="control-label" title=@ModelsTexts.Addition.NotesDescription></label>
+                <textarea asp-for="Notes" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-control" id="divAttachment">
+                <label asp-for="Attachment"  class="control-label"title=@ModelsTexts.Addition.AttachmentDescription></label>
+                @if (string.IsNullOrEmpty(Model.Attachment))
+                {
+                    <input hidden id="AttachmentInput" asp-for="AttachmentInput" type="file" />
+                    <div class="input-group mb-3">
+                        <label id="AttachmentButton" asp-for="AttachmentInput" class="btn btn-outline-secondary" type="button"><i class="bi bi-upload"></i>&nbsp; Cargar Archivo</label>
+                        <input readonly id="Attachment" asp-for="Attachment" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    </div>
+                }
+                else
+                {
+                    <input hidden id="Attachment" asp-for="Attachment" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    <div class="input-group mb-3">
+                        <a class="btn btn-link" asp-area="" asp-controller="Addition" asp-action="Download" asp-route-serverFileName="@Model.Attachment" asp-route-downloadName=@ModelsTexts.Addition.AttachmentTitle asp-route-productId=@ViewBag.productId>
+                            <i class="bi-download"></i>&nbsp; Descargar
+                        </a>
+                    </div>
+                }
+                <span asp-validation-for="Attachment" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    </div>
+    <!-- capture addition properties -->
+    <span data-model="Addition"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of addition form -->
+@if ((int)(ViewData["ModelId"] ?? 0) > 0)
+{
+    <hr class="mb-5 mt-5" />
+    <div class="row mb-5">
+        <div class="col-12 col-sm-12 col-lg-10 col-xl-8">
+            <div class="group-children">
+                <h4>ModelsTexts.Addition.AttachmentsTitle</h4>
+
+                <!-- select AdditionAttachment table -->
+                <table class="table select-table">
+                    <caption>Tabla para seleccionar Anexo Adición</caption>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameForInnerType((AdditionAttachment s) => s.Title) <i class=@ViewBag.titleIcon></i>
+                            </th>
+                            <th>
+                                Descargar
+                            </th>
+                            <th>
+                                @Html.DisplayNameForInnerType((AdditionAttachment s) => s.DateAttached) <i class=@ViewBag.dateAttachedIcon></i>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.AdditionAttachments?.Count() > 0)
+                        {
+                            @foreach (var additionAttachment in Model.AdditionAttachments)
+                            {
+                                <tr>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => additionAttachment.Title)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="AdditionAttachment" asp-action="Download" asp-route-serverFileName="@additionAttachment.FileName" asp-route-downloadName="@additionAttachment.Title" asp-route-additionId=@ViewBag.additionId class="btn btn-link">
+                                            <i class="bi-download"></i>
+                                        </a>
+                                    </td>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => additionAttachment.DateAttached)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="AdditionAttachment" asp-action="Edit" asp-route-id="@additionAttachment.Id" asp-route-additionId=@ViewBag.additionId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                            <i class="bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Addition *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Code').disabled = x;
+    document.getElementById('Product').disabled = x;
+    document.getElementById('Value').disabled = x;
+    document.getElementById('Stage').disabled = x;
+    document.getElementById('DateDelivery').disabled = x;
+    document.getElementById('DateApproved').disabled = x;
+    document.getElementById('Notes').disabled = x;
+    document.getElementById('Attachment').disabled = x;
+    document.getElementById('Attachments').disabled = x;
+</script>
+<!-- Attachments Manager for Addition -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set listeners to display filename and button title.
+        setListeners('AttachmentInput', 'Attachment', 'AttachmentButton');
+    });
+</script>

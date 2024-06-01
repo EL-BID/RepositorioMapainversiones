@@ -1,0 +1,61 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.ProjectImage>?
+@{
+    ViewData["Title"] = "Imágenes";
+    ViewBag.WorkingInProject = true;
+}
+
+<form asp-action="Index" asp-controller="ProjectImage" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="ProjectImage"  asp-action="Create" asp-route-projectId=@ViewBag.projectId class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Imagen</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select ProjectImage table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Imagen</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "ProjectImage", new { sortOrder = @ViewBag.descriptionSort})>
+                            @Html.DisplayNameForInnerType((ProjectImage s) => s.Description) <i class=@ViewBag.descriptionIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var projectImage in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@projectImage.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => projectImage.Description)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@projectImage.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.ProjectImage.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.ProjectImage.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)

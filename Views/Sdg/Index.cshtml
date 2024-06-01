@@ -1,0 +1,70 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.Sdg>?
+@{
+    ViewData["Title"] = "Objetivos de Desarrollo Sostenible";
+}
+
+<form asp-action="Index" asp-controller="Sdg" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="Sdg"  asp-action="Create" class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Objetivo de Desarrollo Sostenible</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select Sdg table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Objetivo de Desarrollo Sostenible</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "Sdg", new { sortOrder = @ViewBag.numberSort})>
+                            @Html.DisplayNameForInnerType((Sdg s) => s.Number) <i class=@ViewBag.numberIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "Sdg", new { sortOrder = @ViewBag.titleSort})>
+                            @Html.DisplayNameForInnerType((Sdg s) => s.Title) <i class=@ViewBag.titleIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var sdg in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@sdg.Id" asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => sdg.Number)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@sdg.Id" asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => sdg.Title)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@sdg.Id" asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.Sdg.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.Sdg.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)

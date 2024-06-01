@@ -1,0 +1,333 @@
+@using IMRepo.Models.Domain;
+@model Project
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Project.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProject" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PROJECT PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.Project.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divCode">
+                <label asp-for="Code" class="control-label" title=@ModelsTexts.Project.CodeDescription></label>
+                <input asp-for="Code" type="text"  readonly>
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divSector">
+                <label asp-for="Sector" class="control-label" title=@ModelsTexts.Project.SectorDescription></label>
+                <select asp-for="Sector" name="Sector" class="form-select" asp-items="ViewBag.listSector" id="Sector"></select>
+                <span asp-validation-for="Sector" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divSubsector">
+                <label asp-for="Subsector" class="control-label" title=@ModelsTexts.Project.SubsectorDescription></label>
+                <select asp-for="Subsector" name="Subsector" class="form-select" asp-items="ViewBag.listSubsector" id="Subsector"></select>
+                <span asp-validation-for="Subsector" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divOffice">
+                <label asp-for="Office" class="control-label" title=@ModelsTexts.Project.OfficeDescription></label>
+                <select asp-for="Office" name="Office" class="form-select" asp-items="ViewBag.listOffice" id="Office"></select>
+                <span asp-validation-for="Office" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divExecutingAgency">
+                <label asp-for="ExecutingAgency" class="control-label" title=@ModelsTexts.Project.ExecutingAgencyDescription></label>
+                <select asp-for="ExecutingAgency" name="ExecutingAgency" class="form-select" asp-items="ViewBag.listExecutingAgency" id="ExecutingAgency"></select>
+                <span asp-validation-for="ExecutingAgency" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divStage">
+                <label asp-for="Stage" class="control-label" title=@ModelsTexts.Project.StageDescription></label>
+                <select asp-for="Stage" name="Stage" class="form-select" asp-items="ViewBag.listStage" id="Stage"></select>
+                <span asp-validation-for="Stage" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divSdg">
+                <label asp-for="Sdg" class="control-label" title=@ModelsTexts.Project.SdgDescription></label>
+                <select asp-for="Sdg" name="Sdg" class="form-select" asp-items="ViewBag.listSdg" id="Sdg"></select>
+                <span asp-validation-for="Sdg" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="group-fields">
+        <div class="row">
+            <div class="col-sm-6">
+                <div  class="form-control"id="divPlannedCost">
+                    <label asp-for="PlannedCost" class="control-label" title=@ModelsTexts.Project.PlannedCostDescription></label>
+                    @Html.TextBoxFor(m => m.PlannedCost, "{0:n2}", new { @onchange = "formatNumber(this,2);" })
+                    <span class="text-danger">@ViewBag.PlannedCostValidationMsg</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div  class="form-control"id="divPlannedDuration">
+                    <label asp-for="PlannedDuration" class="control-label" title=@ModelsTexts.Project.PlannedDurationDescription></label>
+                    @Html.TextBoxFor(m => m.PlannedDuration, "{0:d}")
+                    <span asp-validation-for="PlannedDuration" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div  class="form-control"id="divPlannedStartDate">
+                    <label asp-for="PlannedStartDate" class="control-label" title=@ModelsTexts.Project.PlannedStartDateDescription></label>
+                    <input asp-for="PlannedStartDate" type="date" >
+                    <span asp-validation-for="PlannedStartDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div  class="form-control"id="divActualStartDate">
+                    <label asp-for="ActualStartDate" class="control-label" title=@ModelsTexts.Project.ActualStartDateDescription></label>
+                    <input asp-for="ActualStartDate" type="date" >
+                    <span asp-validation-for="ActualStartDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div  class="form-control"id="divActualEndDate">
+                    <label asp-for="ActualEndDate" class="control-label" title=@ModelsTexts.Project.ActualEndDateDescription></label>
+                    <input asp-for="ActualEndDate" type="date" >
+                    <span asp-validation-for="ActualEndDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divDescription">
+                <label asp-for="Description" class="control-label" title=@ModelsTexts.Project.DescriptionDescription></label>
+                <textarea asp-for="Description" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divObjectives">
+                <label asp-for="Objectives" class="control-label" title=@ModelsTexts.Project.ObjectivesDescription></label>
+                <textarea asp-for="Objectives" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Objectives" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div hidden  class="form-control"id="divLocation">
+                <label asp-for="Location" class="control-label" title=@ModelsTexts.Project.LocationDescription></label>
+                <textarea asp-for="Location" type="hidden" rows="5" class="form-control" hidden></textarea>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="LocationMapDiv" class="full-map-container"></div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+    </div>
+    <!-- capture project properties -->
+    <span data-model="Project"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of project form -->
+@if ((int)(ViewData["ModelId"] ?? 0) > 0)
+{
+    <hr class="mb-5 mt-5" />
+    <div class="row mb-5">
+        <div class="col-12 col-sm-12 col-lg-10 col-xl-8">
+            <div class="group-children">
+                <h4>ModelsTexts.Project.FuentesTitle</h4>
+
+                <!-- select ProjectFunding table -->
+                <table class="table select-table">
+                    <caption>Tabla para seleccionar Fuente de Financiamiento</caption>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameForInnerType((ProjectFunding s) => s.Source) <i class=@ViewBag.sourceIcon></i>
+                            </th>
+                            <th>
+                                @Html.DisplayNameForInnerType((ProjectFunding s) => s.Value) <i class=@ViewBag.valueIcon></i>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ProjectFundings?.Count() > 0)
+                        {
+                            @foreach (var projectFunding in Model.ProjectFundings)
+                            {
+                                <tr>
+                                    <td class="sel-row">
+                                        @if (projectFunding.Source_info != null)
+                                            @Html.DisplayFor(modelItem => projectFunding.Source_info.Name)
+                                    </td>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => projectFunding.Value)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="ProjectFunding" asp-action="Edit" asp-route-id="@projectFunding.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                            <i class="bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr class="mb-5 mt-5" />
+    <div class="row mb-5">
+        <div class="col-12 col-sm-12 col-lg-10 col-xl-8">
+            <div class="group-children">
+                <h4>ModelsTexts.Project.AttachmentsTitle</h4>
+
+                <!-- select ProjectAttachment table -->
+                <table class="table select-table">
+                    <caption>Tabla para seleccionar Anexo Proyecto</caption>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameForInnerType((ProjectAttachment s) => s.Title) <i class=@ViewBag.titleIcon></i>
+                            </th>
+                            <th>
+                                Descargar
+                            </th>
+                            <th>
+                                @Html.DisplayNameForInnerType((ProjectAttachment s) => s.DateAttached) <i class=@ViewBag.dateAttachedIcon></i>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ProjectAttachments?.Count() > 0)
+                        {
+                            @foreach (var projectAttachment in Model.ProjectAttachments)
+                            {
+                                <tr>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => projectAttachment.Title)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="ProjectAttachment" asp-action="Download" asp-route-serverFileName="@projectAttachment.FileName" asp-route-downloadName="@projectAttachment.Title" asp-route-projectId=@ViewBag.projectId class="btn btn-link">
+                                            <i class="bi-download"></i>
+                                        </a>
+                                    </td>
+                                    <td class="sel-row">
+                                        @Html.DisplayFor(modelItem => projectAttachment.DateAttached)
+                                    </td>
+                                    <td class="sel-row">
+                                        <a asp-area="" asp-controller="ProjectAttachment" asp-action="Edit" asp-route-id="@projectAttachment.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                            <i class="bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Project *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Name').disabled = x;
+    document.getElementById('Code').disabled = x;
+    document.getElementById('Sector').disabled = x;
+    document.getElementById('Subsector').disabled = x;
+    document.getElementById('Office').disabled = x;
+    document.getElementById('ExecutingAgency').disabled = x;
+    document.getElementById('Stage').disabled = x;
+    document.getElementById('Sdg').disabled = x;
+    document.getElementById('PlannedCost').disabled = x;
+    document.getElementById('PlannedDuration').disabled = x;
+    document.getElementById('PlannedStartDate').disabled = x;
+    document.getElementById('ActualStartDate').disabled = x;
+    document.getElementById('ActualEndDate').disabled = x;
+    document.getElementById('Description').disabled = x;
+    document.getElementById('Objectives').disabled = x;
+    document.getElementById('Fuentes').disabled = x;
+    document.getElementById('Attachments').disabled = x;
+</script>
+
+<script>
+    $(function () {
+
+        // filter Subsector based on Sector selection
+        var showSubsector = function (selectedSector) {
+            var parentList = JSON.parse('@Html.Raw(@ViewBag.listSubsectorParent)');
+            $('#Subsector option').hide(); // hide all
+
+            // show children of selected parent
+            $('#Subsector').find('option').filter(function () {
+                return (parentList.find(e => ($(this).val() === '0') || ((e.id === $(this).val()) && (e.parentId === selectedSector))));
+            }).show();
+            //set current value
+            var defaultValue = $('#Subsector').val();
+            if (!parentList.find(e => (e.id === defaultValue && e.parentId === selectedSector)))
+                defaultValue = '0';
+            $('#Subsector').val(defaultValue);
+        };
+        //set default Subsector
+        showSubsector($('#Sector').val());
+
+        //on sector update options for subsector
+        $('#Sector').change(function () {
+            showSubsector($(this).val());
+        });
+
+
+    });
+</script>
+<!-- Map Manager -->
+<!-- geocoder: https://github.com/perliedman/leaflet-control-geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" integrity="sha384-gOibXC9S5JpMrpEP0ee6wCSVHjFSEuOzLLzTUmg58qM+mJ1rI8h/aY3lS9YUmo55" crossorigin="anonymous">
+<link rel="stylesheet" href="~/css/L.switchBasemap.css" />
+<script src="~/js/L.switchBasemap.js"></script>
+<script src="~/js/maplib.js"></script>
+<script>
+
+    captureMap('LocationMapDiv', 'Location', @(isEditable ? "true" : "false"), @ProjectGlobals.defaultLatitude, @ProjectGlobals.defaultLongitude);
+
+    $('#FormProject').submit(function () {
+        getMapInfo();
+    });
+</script>

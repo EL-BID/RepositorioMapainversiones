@@ -1,0 +1,269 @@
+﻿@using IMRepo.Areas.Review.Models;
+@using IMRepo.Models.Domain;
+@using IMRepo.Models.Reports;
+
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <form>
+
+                    <!--===================-->
+                    <!-- Pagos -->
+                    <div class="wrap-documents mb-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8"><h2>@ModelsTexts.Payment.titlePlural</h2></div>
+                            <div class="col-lg-4">
+
+                                @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                {
+                                    <div class="mb-2">
+                                        <a asp-area="" asp-controller="Payment" asp-action="Create" class="btn btn-link">
+                                            <span><i class="bi-plus"></i> Crear  @Html.DisplayNameForInnerType((Payment p) => p)</span>
+                                        </a>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+
+
+                        <!--TOTALS -->
+                        @{
+                            PaymentTotalsModel summary = ViewBag.paymentTotals;
+                        }
+                        <div class="row">
+                            <div class="summUp">
+                                <div class="card-list">
+                                    <div class="card">
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Total Pagos</span>
+                                            <span class="label-number">
+                                                @if (summary.totalQty.HasValue)
+                                                {
+                                                    @summary.totalQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Total pagos</span>
+                                            <span class="label-number">
+                                                @if (summary.totalValue.HasValue)
+                                                {
+                                                    @summary.totalValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Presentados</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedQty.HasValue)
+                                                {
+                                                    @summary.requestedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Monto Presentado</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedValue.HasValue)
+                                                {
+                                                    @summary.requestedValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Aprobados</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedQty.HasValue)
+                                                {
+                                                    @summary.approvedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Monto aprobado</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedValue.HasValue)
+                                                {
+                                                    @summary.approvedValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Saldo a ejecutar</span>
+                                            <span class="label-number">
+                                                @if (summary.available.HasValue)
+                                                {
+                                                    <span>@summary.available.Value.ToString("c0")</span>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--totals -->
+                        @if (Model?.Products?.Count > 0)
+                        {
+                            <div class="accordion" id="accordionPayment">
+
+
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="numCel">#</th>
+                                                <th>@Html.DisplayNameForInnerType((Payment p) => p.Stage)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((Payment p) => p.PaymentAmount)</th>
+                                                <th class="dateCel">@Html.DisplayNameForInnerType((Payment p) => p.ReportedMonth)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((Payment p) => p.PhysicalAdvance)</th>
+                                                <th></th>
+                                                @if (User.IsInRole(ProjectGlobals.RoleDireccion))
+                                                {
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Product product in Model.Products)
+                                            {
+                                                if (product?.Payments?.Count > 0)
+                                                    @foreach (Payment payment in product.Payments)
+                                                    {
+                                                        <tr>
+                                                            <td class="numCel">
+                                                                @payment.Code
+                                                            </td>
+                                                            <td>
+                                                                @if (payment.Stage_info != null)
+                                                                {
+                                                                    <span>@payment.Stage_info.Title</span>
+                                                                }
+                                                            </td>
+                                                            <td class="numCel">
+                                                                @(payment.PaymentAmount.HasValue ? payment.PaymentAmount.Value.ToString("c0") : "")
+                                                            </td>
+                                                            <td class="dateCel">
+                                                                @if (@payment.ReportedMonth.HasValue)
+                                                                {
+                                                                    @payment.ReportedMonth.Value.ToString("yyyy-MM")
+                                                                }
+                                                            </td>
+                                                            <td class="numCel">
+                                                                @if (payment.PhysicalAdvance.HasValue)
+                                                                {
+                                                                    <span>
+                                                                        @payment.PhysicalAdvance.Value.ToString("n1")
+                                                                    </span>
+                                                                }
+                                                            </td>
+                                                            @*                                                    <td>
+                                            <span>
+                                            <span class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapsePayment" + @payment.Id) aria-expanded="false" aria-controls=@("collapse" + @payment.Id)>
+                                            @if (payment.PaymentAttachments?.Count > 0)
+                                            {
+                                            <span>con anexos</span>
+                                            }
+                                            else
+                                            {
+                                            <span>sin anexos</span>
+                                            }
+                                            </span>
+                                            </span>
+                                            </td>
+                                            *@
+                                                            @if ((payment.Stage != 5) && (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                            {
+                                                                <td title="modificar">
+                                                                    <a asp-route-id="@payment.Id" asp-area="" asp-controller="Payment" asp-action="Edit" class="btn btn-link"><i class="bi-pencil"></i></a>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td title="ver">
+                                                                    <a asp-route-id="@payment.Id" asp-area="" asp-controller="Payment" asp-action="Display" class="btn btn-link"><i class="bi-eye"></i></a>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </form>
+                <form>
+
+                    <!-- Attachments -->
+                    <div class="col-xl-7 col-lg-9 col-md-11">
+                        @foreach (Product product in Model.Products)
+                        {
+                            if (product?.Payments?.Count > 0)
+                                @foreach (Payment payment in product.Payments)
+                                {
+                                    <div class="accordion-item bg-filled">
+                                        <div id=@("collapsePayment" + @payment.Id) class="accordion-collapse collapse" aria-labelledby=@("heading" + @payment.Id) data-bs-parent="#accordionPayment">
+                                            <div class="accordion-body">
+                                                <div class="container">
+                                                    <h6 class="mb-2">Anexos @Html.DisplayNameForInnerType((Payment p) => p) # @payment.Id.ToString("n0")</h6>
+                                                    @if (payment.PaymentAttachments?.Count > 0)
+                                                    {
+                                                        @foreach (PaymentAttachment paymentAttachment in payment.PaymentAttachments)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-8"><span>@paymentAttachment.Title</span></div>
+                                                                <div class="col-1">
+                                                                    <a class="btn nav-link" asp-area="" asp-controller="PaymentAttachment" asp-action="Download" asp-route-serverFileName="@paymentAttachment.File" asp-route-downloadName="@paymentAttachment.Title" asp-route-paymentId=@ViewBag.paymentId>
+                                                                        <i class="bi-download"></i>
+                                                                    </a>
+                                                                </div>
+
+                                                                @if (User.IsInRole(ProjectGlobals.RoleAdmin))
+                                                                {
+                                                                    <div class="col-1">
+                                                                        <button class="btn nav-link" asp-area="" asp-controller="PaymentAttachment" asp-action="Delete" method="post" formmethod="post" asp-route-id="@paymentAttachment.Id">
+                                                                            <i class="bi-trash"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                }
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
+                                                            <span>(Sin Anexos)</span>
+                                                        </div>
+                                                    }
+                                                    @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                                   || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                                   || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                                    {
+                                                        <a asp-route-paymentId=@payment.Id asp-area="" asp-controller="PaymentAttachment" asp-action="Create" asp-route-paymentId=@ViewBag.paymentId class="btn btn-clear float-end">
+                                                            <span><i class="bi-plus"></i> Cargar Anexo</span>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                        }
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

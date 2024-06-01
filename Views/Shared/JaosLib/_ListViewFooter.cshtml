@@ -1,0 +1,18 @@
+﻿@{
+    <!-- return button if return page available -->
+    if (!string.IsNullOrEmpty(ViewBag.returnUrl))
+    {
+        string returnlink = @ViewBag.returnUrl;
+        if (!string.IsNullOrEmpty(ViewBag.bufferedUrl))
+        {
+            if (!returnlink.Contains("returnUrl"))
+            {
+                string separator = (returnlink.Contains('?')) ? "&" : "?";
+                returnlink += string.Format("{0}returnUrl={1}", separator, ViewBag.bufferedUrl);
+            }
+        }
+        <a href=@returnlink formnovalidate class="btn btn-basic"><i class="bi-arrow-90deg-left"></i>&nbsp; Regresar</a>
+    }
+}
+
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml", ViewData)

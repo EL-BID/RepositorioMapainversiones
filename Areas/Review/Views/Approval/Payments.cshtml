@@ -1,0 +1,118 @@
+﻿@using IMRepo.Models.Domain;
+@model List<Payment>
+@{
+    Layout = "_ApprovalLayout";
+    ViewBag.navPayment = "active";
+}
+
+
+
+
+
+
+@if (Model?.Count > 0)
+{
+    <h4 class="mb-4">Pagos pendientes de trámite</h4>
+
+
+
+
+
+    <div class="card-list">
+
+        @foreach (Payment payment in Model)
+        {
+            <a class="btn-clear" asp-route-id="@payment.Id" asp-area="" asp-controller="Payment" asp-action="Edit">
+
+                <div class="card">
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Product p) => p.Project_info)
+                        </span>
+                        <span class="label-number">
+                            @if (!string.IsNullOrEmpty(payment.Product_info?.Project_info?.Name))
+                            {
+                                @payment.Product_info?.Project_info?.Name
+                            }
+                        </span>
+                    </div>
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Payment p) => p.Product_info)
+                        </span>
+                        <span class="label-number">
+                            @if (payment.Product_info?.Id > 0)
+                            {
+                                @payment.Product_info?.Name
+                            }
+                        </span>
+                    </div>
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Payment p) => p.Code)
+                        </span>
+                        <span class="label-number">
+                            @if (payment.Code != null)
+                            {
+                                @payment.Code
+                            }
+                        </span>
+                    </div>
+                    <div class="wrap-item-list">
+                        <div class="wrap-item-list">
+                            <span class="label-dato">
+                                @Html.DisplayNameForInnerType((Payment p) => p.ReportedMonth)
+                            </span>
+                            <span class="label-number">
+                                @if (payment.ReportedMonth.HasValue && payment.ReportedMonth.Value != DateTime.MinValue)
+                                {
+                                    @payment.ReportedMonth.Value.ToString("yyyy-MMM")
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Payment p) => p.PaymentAmount)
+
+                        </span>
+                        <span class="label-number">
+                            @if (payment.PaymentAmount.HasValue && payment.PaymentAmount > 0)
+                            {
+                                @payment.PaymentAmount?.ToString("n0")
+                            }
+                        </span>
+                    </div>
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Payment p) => p.PhysicalAdvance)
+                        </span>
+                        <span class="label-number">
+                            @if (payment.PhysicalAdvance.HasValue)
+                            {
+                                @payment.PhysicalAdvance.Value.ToString("n0")
+                            }
+                        </span>
+                    </div>
+                    <div class="wrap-item-list">
+                        <span class="label-dato">
+                            @Html.DisplayNameForInnerType((Payment p) => p.Stage)
+                        </span>
+                        <span class="label-number">
+                            @if (payment.Stage_info != null)
+                            {
+                                <span>@payment.Stage_info.Title</span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+
+
+}
+else
+{
+    <p>No se encuentran Pagos pendientes de trámite.</p>
+}

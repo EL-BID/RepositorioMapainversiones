@@ -1,0 +1,11 @@
+@using IMRepo.Models.Domain;
+@model IMRepo.Models.Domain.Extension
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.Extension.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/Extension/_PartialCapture.cshtml", ViewData)

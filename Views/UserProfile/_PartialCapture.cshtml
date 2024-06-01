@@ -1,0 +1,88 @@
+@using IMRepo.Models.Domain;
+@model UserProfile
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.UserProfile.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormUserProfile" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE USERPROFILE PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divAspNetUserId">
+                <label asp-for="AspNetUserId" class="control-label" title=@ModelsTexts.UserProfile.AspNetUserIdDescription></label>
+                <input asp-for="AspNetUserId" type="text" >
+                <span asp-validation-for="AspNetUserId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divEmail">
+                <label asp-for="Email" class="control-label" title=@ModelsTexts.UserProfile.EmailDescription></label>
+                <input asp-for="Email" type="email" >
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.UserProfile.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divSurname">
+                <label asp-for="Surname" class="control-label" title=@ModelsTexts.UserProfile.SurnameDescription></label>
+                <input asp-for="Surname" type="text" >
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divOffice">
+                <label asp-for="Office" class="control-label" title=@ModelsTexts.UserProfile.OfficeDescription></label>
+                <select asp-for="Office" name="Office" class="form-select" asp-items="ViewBag.listOffice" id="Office"></select>
+                <span asp-validation-for="Office" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divNotes">
+                <label asp-for="Notes" class="control-label" title=@ModelsTexts.UserProfile.NotesDescription></label>
+                <textarea asp-for="Notes" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture userprofile properties -->
+    <span data-model="UserProfile"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of userprofile form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display UserProfile *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('AspNetUserId').disabled = x;
+    document.getElementById('Email').disabled = x;
+    document.getElementById('Name').disabled = x;
+    document.getElementById('Surname').disabled = x;
+    document.getElementById('Office').disabled = x;
+    document.getElementById('Notes').disabled = x;
+</script>

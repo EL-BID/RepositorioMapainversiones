@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <li class="main-mnu-item-has-child open main-mnu-item-mega-mnu">
+        @*        <a asp-area="Identity" asp-page="/Account/Logout" data-title="cerrar sesión"><span>cerrar sesión</span></a>
+    *@
+        @*            <button type="submit" class="nav-link btn btn-link text-dark">cerrar sesión</button>
+    *@
+        <a data-title="Cerrar sesión" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <span>Cerrar sesión</span>
+        </a>
+
+
+    </li>
+}
+else
+{
+    <li class="main-mnu-item-has-child main-mnu-item-mega-mnu">
+        <a asp-area="Identity" asp-page="/Account/Register">Registrarme</a>
+    </li>
+    <li class="main-mnu-item-has-child main-mnu-item-mega-mnu">
+        <a asp-area="Identity" asp-page="/Account/Login">Ingresar</a>
+    </li>
+}
+
+

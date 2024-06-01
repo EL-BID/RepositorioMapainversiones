@@ -1,0 +1,12 @@
+@using IMRepo.Models.Domain;
+@model PaymentStage
+@{
+    ViewData["ModelId"] = Model.Id;
+    ViewData["DeleteAvailable"] = true;
+    ViewData["Title"] = string.Format(JaosUITitles.titleEdit, ModelsTexts.PaymentStage.title);
+    ViewData["Action"] = "Edit";
+    ViewData["UpdateAvailable"] = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/PaymentStage/_PartialCapture.cshtml", ViewData)

@@ -1,0 +1,24 @@
+﻿@page
+@using IMRepo.Areas.Identity.Pages.Account;
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmar Registro";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <p class="alert-danger">Si no se selecciona la siguiente opción la cuenta no será registrada.</p>
+        <p>
+            <a id="confirm-link" href="@Model.EmailConfirmationUrl">Por favor seleccionar esta opción para confirmar el registro.</a>
+        </p>
+
+    }
+    else
+    {
+        <p>
+        </p>
+    }
+}
+

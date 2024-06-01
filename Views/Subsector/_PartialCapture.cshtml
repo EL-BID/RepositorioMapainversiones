@@ -1,0 +1,58 @@
+@using IMRepo.Models.Domain;
+@model Subsector
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Subsector.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormSubsector" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE SUBSECTOR PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divSector">
+                <label asp-for="Sector" class="control-label" title=@ModelsTexts.Subsector.SectorDescription></label>
+                @if (((int?)@ViewBag.sectorId) != null && ((int?)@ViewBag.sectorId).Value > 0)
+                {
+                    @Html.HiddenFor(m => m.Sector)
+                    <select disabled asp-for="Sector" name="Sector" class="form-select" asp-items="ViewBag.listSector" id="Sector"></select>
+                }
+                else
+                {
+                    <select asp-for="Sector" name="Sector" class="form-select" asp-items="ViewBag.listSector" id="Sector"></select>
+                }
+                <span asp-validation-for="Sector" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.Subsector.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture subsector properties -->
+    <span data-model="Subsector"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of subsector form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Subsector *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Sector').disabled = x;
+    document.getElementById('Name').disabled = x;
+</script>

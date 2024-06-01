@@ -1,0 +1,230 @@
+﻿@using IMRepo.Models.Domain;
+@using IMRepo.Models.Reports;
+
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <form>
+                    <div class="wrap-documents mb-5">
+
+                        <div class="row align-items-center">
+                            <div class="col-lg-8"><h2>@ModelsTexts.Addition.titlePlural</h2></div>
+                            <div class="col-lg-4">
+                                <!--  Add New Addition -->
+                                @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                {
+                                    <div class="mb-2">
+                                        <a asp-area="" asp-controller="Addition" asp-action="Create" class="btn btn-link">
+                                            <span><i class="bi-plus"></i> Crear  @Html.DisplayNameForInnerType((Addition p) => p)</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+
+                        <!--TOTALS -->
+                        @{
+                            PaymentTotalsModel summary = ViewBag.additionTotals;
+                        }
+                        <div class="row">
+                            <div class="summUp">
+                                <div class="card-list">
+                                    <div class="card">
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Cantidad total</span>
+                                            <span class="label-number">
+                                                @if (summary.totalQty.HasValue)
+                                                {
+                                                    @summary.totalQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Valor total</span>
+                                            <span class="label-number">
+                                                @if (summary.totalValue.HasValue)
+                                                {
+                                                    @summary.totalValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Por aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedQty.HasValue)
+                                                {
+                                                    @summary.requestedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Valor x aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedValue.HasValue)
+                                                {
+                                                    @summary.requestedValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Aprobadas</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedQty.HasValue)
+                                                {
+                                                    @summary.approvedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Valor aprobadas</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedValue.HasValue)
+                                                {
+                                                    @summary.approvedValue.Value.ToString("c0")
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--totals -->
+
+                        <!-- LIST OF ADDITIONS -->
+                        @if (Model?.Products?.Count > 0)
+                        {
+                            <div class="accordion" id="accordionAddition">
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="numCel">#</th>
+                                                <th class="dateCel">@Html.DisplayNameForInnerType((Addition p) => p.DateDelivery)</th>
+                                                <th>@Html.DisplayNameForInnerType((Addition p) => p.Stage)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((Addition p) => p.Value)</th>
+                                                <th></th>
+                                                @if (User.IsInRole(ProjectGlobals.RoleDireccion))
+                                                {
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (Product product in Model.Products)
+                                            {
+                                                if (product?.Additions?.Count > 0)
+                                                    @foreach (Addition addition in product.Additions)
+                                                    {
+                                                        <tr>
+                                                            <td class="numCel">
+                                                                @addition.Code
+                                                            </td>
+                                                            <td class="dateCel">
+                                                                @addition.DateDelivery?.ToString("yyyy-MM-dd")
+                                                            </td>
+                                                            <td>
+                                                                @if (addition.Stage_info != null)
+                                                                {
+                                                                    <span>@addition.Stage_info.Name</span>
+                                                                }
+                                                            </td>
+                                                            <td class="numCel">
+                                                                @addition.Value?.ToString("n0")
+                                                            </td>
+                                                            @*                                                    <td>
+                                            <span class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapseAddition" + @addition.Id) aria-expanded="false" aria-controls=@("collapseAddition" + @addition.Id) data-bs-parent="#accordionAddition">
+                                            @if (addition.AdditionAttachments?.Count > 0)
+                                            {
+                                            <span>con anexos</span>
+                                            }
+                                            else
+                                            {
+                                            <span>sin anexos</span>
+                                            }
+                                            </span>
+                                            </td>
+                                            *@
+                                                            @if ((addition.Stage != 3) && (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                            {
+                                                                <td title="modificar">
+                                                                    <a asp-route-id="@addition.Id" asp-area="" asp-controller="Addition" asp-action="Edit" class="btn btn-link"><i class="bi-pencil"></i></a>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td title="ver">
+                                                                    <a asp-route-id="@addition.Id" asp-area="" asp-controller="Addition" asp-action="Display" class="btn btn-link"><i class="bi-eye"></i></a>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                    <!-- Attachments -->
+                                    <div class="col-xl-7 col-lg-9 col-md-11">
+
+                                        @foreach (Product product in Model.Products)
+                                        {
+                                            if (product?.Additions?.Count > 0)
+                                                @foreach (Addition addition in product.Additions)
+                                                {
+                                                    <div class="accordion-item bg-filled">
+                                                        <div id=@("collapseAddition" + @addition.Id) class="accordion-collapse collapse" aria-labelledby=@("heading" + @addition.Id) data-bs-parent="#accordionAddition">
+                                                            <div class="accordion-body">
+                                                                <div class="container">
+                                                                    <h6 class="mb-2">Anexos @Html.DisplayNameForInnerType((Addition p) => p) # @addition.Id.ToString("n0")</h6>
+                                                                    @if (addition.AdditionAttachments?.Count > 0)
+                                                                    {
+                                                                        @foreach (AdditionAttachment additionAttachment in addition.AdditionAttachments)
+                                                                        {
+                                                                            <div class="row">
+                                                                                <div class="col-8"><span>@additionAttachment.Title</span></div>
+                                                                                <div class="col-4">
+                                                                                    <a asp-area="" asp-controller="AdditionAttachment" asp-action="Download" asp-route-serverFileName="@additionAttachment.FileName" asp-route-downloadName="@additionAttachment.Title" asp-route-additionId=@ViewBag.additionId>
+                                                                                        <i class="bi-download"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                    @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                                                   || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                                                   || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                                                    {
+                                                                        <a asp-route-additionId=@addition.Id asp-area="" asp-controller="AdditionAttachment" asp-action="Create" asp-route-additionId=@ViewBag.additionId class="btn btn-clear float-end">
+                                                                            <span><i class="bi-plus"></i> Cargar Anexo Extensión</span>
+                                                                        </a>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                        }
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        }
+                        <!-- list of additions -->
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

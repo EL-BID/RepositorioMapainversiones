@@ -1,0 +1,95 @@
+@using IMRepo.Models.Domain;
+@model ProjectImage
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.ProjectImage.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProjectImage" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl"enctype="multipart/form-data">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PROJECTIMAGE PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div>
+            <div class="form-control" id="divFile">
+                <label asp-for="File"  class="control-label"title=@ModelsTexts.ProjectImage.FileDescription></label>
+                @if (string.IsNullOrEmpty(Model.File))
+                {
+                    <input hidden id="FileInput" asp-for="FileInput" type="file" />
+                    <div class="input-group mb-3">
+                        <label id="FileButton" asp-for="FileInput" class="btn btn-outline-secondary" type="button"><i class="bi bi-upload"></i>&nbsp; Cargar Archivo</label>
+                        <input readonly id="File" asp-for="File" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    </div>
+                }
+                else
+                {
+                    <input hidden id="File" asp-for="File" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    <div class="input-group mb-3">
+                        <a class="btn btn-link" asp-area="" asp-controller="ProjectImage" asp-action="Download" asp-route-serverFileName="@Model.File" asp-route-downloadName=@ModelsTexts.ProjectImage.FileTitle asp-route-projectId=@ViewBag.projectId>
+                            <i class="bi-download"></i>&nbsp; Descargar
+                        </a>
+                    </div>
+                }
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divDescription">
+                <label asp-for="Description" class="control-label" title=@ModelsTexts.ProjectImage.DescriptionDescription></label>
+                <textarea asp-for="Description" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divImageDate">
+                <label asp-for="ImageDate" class="control-label" title=@ModelsTexts.ProjectImage.ImageDateDescription></label>
+                <input asp-for="ImageDate" type="date" >
+                <span asp-validation-for="ImageDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divUploadDate">
+                <label asp-for="UploadDate" class="control-label" title=@ModelsTexts.ProjectImage.UploadDateDescription></label>
+                <input asp-for="UploadDate" type="date"  readonly>
+                <span asp-validation-for="UploadDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture projectimage properties -->
+    <span data-model="ProjectImage"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of projectimage form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display ProjectImage *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Project').disabled = x;
+    document.getElementById('File').disabled = x;
+    document.getElementById('Description').disabled = x;
+    document.getElementById('ImageDate').disabled = x;
+    document.getElementById('UploadDate').disabled = x;
+</script>
+<!-- Attachments Manager for ProjectImage -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set listeners to display filename and button title.
+        setListeners('FileInput', 'File', 'FileButton');
+    });
+</script>

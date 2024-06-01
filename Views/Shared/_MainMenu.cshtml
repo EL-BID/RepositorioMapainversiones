@@ -1,0 +1,68 @@
+﻿@using IMRepo.Models.Domain;
+@using System.Text.Json;
+@using IMRepo.Settings
+@using Newtonsoft.Json
+@{
+    string? textProject = Context.Session.GetString("project");
+    Project? sessionProject = (!string.IsNullOrEmpty(textProject)) ? System.Text.Json.JsonSerializer.Deserialize<Project>(textProject) : null;
+}
+
+
+<nav class="main-mnu">
+    <ul class="main-mnu-list">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+
+            @foreach (var menuItem in MainMenuOptions.MenuItems)
+            {
+                @if (menuItem.AllowedRoles?.Any() == null || menuItem.AllowedRoles.Any(r => User.IsInRole(r)))
+                    @if (!menuItem.requiresProject || sessionProject?.Id > 0)
+                    {
+                        <li class="@(menuItem.SubItems?.Any() == true ? "main-mnu-item-has-child open main-mnu-item-mega-mnu" : "main-mnu-item")">
+                            @if (menuItem.SubItems?.Any() != true)
+                            {
+                                <a data-title="@menuItem.Title"
+                                   asp-area="@menuItem.Area"
+                                   asp-controller="@menuItem.Controller"
+                                   asp-action="@menuItem.Action">
+                                    <span>@menuItem.Title</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="#!" data-title="@menuItem.Title">
+                                    <span>@menuItem.Title</span>
+                                </a>
+                                <ul>
+                                    @foreach (var subItem in menuItem.SubItems)
+                                    {
+                                        @if (subItem.AllowedRoles?.Any() == null || subItem.AllowedRoles.Any(r => User.IsInRole(r)))
+                                            @if (!subItem.requiresProject || sessionProject?.Id > 0)
+                                            {
+                                                <li>
+                                                    <a data-title="@subItem.Title"
+                                                       asp-area="@subItem.Area"
+                                                       asp-controller="@subItem.Controller"
+                                                       asp-action="@subItem.Action">
+                                                        <span>@subItem.Title</span>
+                                                    </a>
+                                                </li>
+                                                @if (subItem.endWithSeparator)
+                                                {
+                                                    <li><hr class="dropdown-divider"></li>
+                                                }
+                                            }
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+            }
+
+
+
+        }
+        <partial name="_LoginPartial" />
+    </ul>
+</nav>
+

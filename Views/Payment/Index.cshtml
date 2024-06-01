@@ -1,0 +1,91 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.Payment>?
+@{
+    ViewData["Title"] = "Pagos";
+    ViewBag.WorkingInProject = true;
+}
+
+<form asp-action="Index" asp-controller="Payment" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="Payment"  asp-action="Create" asp-route-productId=@ViewBag.productId class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Pago</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select Payment table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Pago</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "Payment", new { sortOrder = @ViewBag.codeSort})>
+                            @Html.DisplayNameForInnerType((Payment s) => s.Code) <i class=@ViewBag.codeIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "Payment", new { sortOrder = @ViewBag.paymentAmountSort})>
+                            @Html.DisplayNameForInnerType((Payment s) => s.PaymentAmount) <i class=@ViewBag.paymentAmountIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "Payment", new { sortOrder = @ViewBag.physicalAdvanceSort})>
+                            @Html.DisplayNameForInnerType((Payment s) => s.PhysicalAdvance) <i class=@ViewBag.physicalAdvanceIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "Payment", new { sortOrder = @ViewBag.dateDeliverySort})>
+                            @Html.DisplayNameForInnerType((Payment s) => s.DateDelivery) <i class=@ViewBag.dateDeliveryIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var payment in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@payment.Id" asp-route-productId=@ViewBag.productId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => payment.Code)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@payment.Id" asp-route-productId=@ViewBag.productId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => payment.PaymentAmount)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@payment.Id" asp-route-productId=@ViewBag.productId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => payment.PhysicalAdvance)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@payment.Id" asp-route-productId=@ViewBag.productId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => payment.DateDelivery)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@payment.Id" asp-route-productId=@ViewBag.productId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.Payment.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.Payment.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)

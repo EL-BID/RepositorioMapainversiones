@@ -1,0 +1,11 @@
+@using IMRepo.Models.Domain;
+@model ProjectImage
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleCreate, ModelsTexts.ProjectImage.title);
+    ViewData["Action"] = "Create";
+    ViewData["UpdateAvailable"] = true;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/ProjectImage/_PartialCapture.cshtml", ViewData)

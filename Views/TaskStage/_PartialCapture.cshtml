@@ -1,0 +1,51 @@
+@using IMRepo.Models.Domain;
+@model TaskStage
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.TaskStage.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormTaskStage" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE TASKSTAGE PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.TaskStage.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divOrder">
+                <label asp-for="Order" class="control-label" title=@ModelsTexts.TaskStage.OrderDescription></label>
+                @Html.TextBoxFor(m => m.Order, "{0:d}")
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture taskstage properties -->
+    <span data-model="TaskStage"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of taskstage form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display TaskStage *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Name').disabled = x;
+    document.getElementById('Order').disabled = x;
+</script>

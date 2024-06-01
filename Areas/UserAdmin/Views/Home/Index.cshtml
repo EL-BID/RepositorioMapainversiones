@@ -1,0 +1,130 @@
+﻿@model IEnumerable<JaosLib.Areas.UserAdmin.Models.UserSetupModel>
+@{
+    ViewData["Title"] = "Perfiles de Usuario";
+}
+
+
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+
+<form asp-action="Index" asp-controller="Home" asp-area="UserAdmin">
+    <div class="row">
+        <div class="col-md-5 col-sm-6 col-9">
+            <input name="searchText" type="text" value="@ViewBag.searchText" class="form-control" />
+        </div>
+        <div class="col-md-2 col-sm-3 col-3">
+            <button type="submit" class="btn btn-danger"><i class="bi-search"></i>&nbsp; Buscar</button>
+        </div>
+    </div>
+
+
+    <table class="table select-table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.user.Email)
+                </th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Rol</th>
+                <th>Actualizar</th>
+                <th>Restablecer Contraseña</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var recordNumber = 0;
+            }
+            @foreach (var userSetup in Model)
+                if (!string.IsNullOrEmpty(userSetup?.user?.Email))
+                {
+
+                    recordNumber = recordNumber + 1;
+                    <tr>
+                        <td class="sel-row">
+                            @if (userSetup.profile != null)
+                            {
+                                <a asp-action="Edit" asp-route-mail="@userSetup?.user?.Email">
+                                    @Html.DisplayFor(modelItem => userSetup.user.Email)
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Create" asp-route-mail="@userSetup?.user?.Email">
+                                    @Html.DisplayFor(modelItem => userSetup.user.Email)
+                                </a>
+                            }
+                        </td>
+                        <td class="sel-row">
+                            @if (userSetup?.profile != null)
+                            {
+                                <a asp-action="Edit" asp-route-mail="@userSetup?.user?.Email">
+                                    @Html.DisplayFor(modelItem => userSetup.profile.Name)
+                                </a>
+                            }
+                        </td>
+                        <td class="sel-row">
+                            @if (userSetup?.profile != null)
+                            {
+                                <a asp-action="Edit" asp-route-mail="@userSetup?.user?.Email">
+                                    @Html.DisplayFor(modelItem => userSetup.profile.Surname)
+                                </a>
+                            }
+                        </td>
+                        <td class="sel-row">
+                            @if (userSetup?.profile != null)
+                            {
+                                <a asp-action="Edit" asp-route-mail="@userSetup?.user?.Email">
+                                    @Html.DisplayFor(modelItem => userSetup.roleName)
+                                </a>
+                            }
+                        </td>
+                        <td class="sel-row">
+                            @if (userSetup?.profile != null)
+                            {
+                                <a asp-action="Edit" class="btn btn-border" asp-route-mail="@userSetup?.user?.Email">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Create" class="btn btn-basic" asp-route-mail="@userSetup?.user?.Email">
+                                    <i class="bi-plus"></i>
+                                </a>
+                            }
+                        </td>
+                        <td class="sel-row">
+                            @{
+                                var name = "deleteConfirmation" + @recordNumber;
+                                var targetName = "#" + name;
+                            }
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target=@targetName><i class="bi-unlock"></i></button>
+
+                            @* Confirm before deleting *@
+                            <div class="modal fade" id=@name tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Advertencia</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Restablecer contraseña para</p>
+                                            <p>@userSetup?.user?.Email</p>
+                                            Seguro desea restablecer la contraseña?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                                            <button type="submit" class="btn btn-danger" asp-action="ResetPassword" method="post" asp-route-id="@userSetup?.user?.Email">Reestablecer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+        </tbody>
+    </table>
+</form>

@@ -1,0 +1,10 @@
+@model IMRepo.Models.Domain.ProjectFunding
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.ProjectFunding.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/ProjectFunding/_PartialCapture.cshtml", ViewData)
