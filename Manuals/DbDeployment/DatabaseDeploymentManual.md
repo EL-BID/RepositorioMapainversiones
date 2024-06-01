@@ -61,9 +61,11 @@ La base de datos restaurada tiene un usuario del sistema de nivel administrador.
 Lo primero que se debe hacer al instalar el sistema y la base de datos es ingresar al sistema con el usuario administrador pre-registrado y modificar la clave de acceso.
 
 ![Image](images/Usuario_pre_registrado_de_Administracion_del_Sistema_2.png)
+
 Información del usuario pre-registrado:
-	Email: admin@mail.com
-	Contraseña: IDBRepository@C4D
+
+- Email: admin@mail.com
+- Contraseña: IDBRepository@C4D
 
 Una vez modificada la contraseña se registra la información de las diferentes tablas de configuración para poder empezar a trabajar en los proyectos. Los nuevos usuarios deben registrarse en el sistema y luego ser autorizados por un administrador del sistema que les asigna su rol correspondiente.
 
