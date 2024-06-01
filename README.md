@@ -103,7 +103,7 @@ Actualizar la cadena de conexión en el código del sistema.
 Cargar la información de las tablas de configuración.
 Registrar y autorizar usuarios.
 
-Para un mayor detalle puede consultar el [Manual de Instalación de Base de Datos](https://github.com/EL-BID/RepositorioMapaInversiones/tree/main/Manuals/DbDeployment/DatabaseDeploymentManual). 
+Para un mayor detalle puede consultar el [Manual de Instalación de Base de Datos](https://github.com/EL-BID/RepositorioMapaInversiones/tree/main/Manuals/DbDeployment/DatabaseDeploymentManual.md). 
 
 
 #### Primeros pasos
