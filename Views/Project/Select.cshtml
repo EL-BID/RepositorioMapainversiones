@@ -1,0 +1,96 @@
+@using IMRepo.Services.basic;
+@model IEnumerable<IMRepo.Models.Domain.Project>
+@{
+    ViewData["Title"] = "Seleccionar Proyecto";
+    ViewBag.WorkingInProject = true;
+}
+
+<form asp-action="Select" asp-controller="Project" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    @if (Model != null && Model.Any())
+    {
+        @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+
+        <!-- select table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Proyecto</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Select", "Project", new { sortOrder = @ViewBag.nameSort})>
+                            @Html.DisplayNameFor(model => model.Name) <i class=@ViewBag.nameIcon></i>
+                         </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Select", "Project", new { sortOrder = @ViewBag.codeSort})>
+                            @Html.DisplayNameFor(model => model.Code) <i class=@ViewBag.codeIcon></i>
+                         </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Select", "Project", new { sortOrder = @ViewBag.sectorSort})>
+                            @Html.DisplayNameFor(model => model.Sector) <i class=@ViewBag.sectorIcon></i>
+                         </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Select", "Project", new { sortOrder = @ViewBag.officeSort})>
+                            @Html.DisplayNameFor(model => model.Office) <i class=@ViewBag.officeIcon></i>
+                         </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Select", "Project", new { sortOrder = @ViewBag.stageSort})>
+                            @Html.DisplayNameFor(model => model.Stage) <i class=@ViewBag.stageIcon></i>
+                         </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in Model!)
+                {
+                    <tr>
+                        <td class="sel-row">
+                            <a asp-area=@ParentProjectService.defaultArea asp-controller=@ParentProjectService.defaultController asp-action=@ParentProjectService.defaultAction asp-route-id="@project.Id">
+                                @Html.DisplayFor(modelItem => project.Name)
+                            </a>
+                        </td>
+                        <td class="sel-row">
+                            <a asp-area=@ParentProjectService.defaultArea asp-controller=@ParentProjectService.defaultController asp-action=@ParentProjectService.defaultAction asp-route-id="@project.Id">
+                                @Html.DisplayFor(modelItem => project.Code)
+                            </a>
+                        </td>
+                        <td class="sel-row">
+                            <a asp-area=@ParentProjectService.defaultArea asp-controller=@ParentProjectService.defaultController asp-action=@ParentProjectService.defaultAction asp-route-id="@project.Id">
+                                @if (project.Sector_info != null)
+                                    @Html.DisplayFor(modelItem => project.Sector_info.Name)
+                            </a>
+                        </td>
+                        <td class="sel-row">
+                            <a asp-area=@ParentProjectService.defaultArea asp-controller=@ParentProjectService.defaultController asp-action=@ParentProjectService.defaultAction asp-route-id="@project.Id">
+                                @if (project.Office_info != null)
+                                    @Html.DisplayFor(modelItem => project.Office_info.Name)
+                            </a>
+                        </td>
+                        <td class="sel-row">
+                            <a asp-area=@ParentProjectService.defaultArea asp-controller=@ParentProjectService.defaultController asp-action=@ParentProjectService.defaultAction asp-route-id="@project.Id">
+                                @if (project.Stage_info != null)
+                                    @Html.DisplayFor(modelItem => project.Stage_info.Name)
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.Project.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.Project.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)
+

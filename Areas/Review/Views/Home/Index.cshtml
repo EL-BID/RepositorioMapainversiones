@@ -1,0 +1,284 @@
+﻿@model IMRepo.Models.Domain.Project
+@using IMRepo.Areas.Review.Models;
+@using IMRepo.Models.Domain;
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "";
+    ViewBag.WorkingInProject = true;
+    ViewBag.navDashboard = "active";
+    ViewBag.NoContainer = true;
+}
+
+
+@if (Model != null)
+{
+    <!-- MAIN INFO -->
+    <section class="section bg-plain mt-0 pt-0 pb-0">
+        <div class="container">
+
+            <div class="banner-main-info mt-0 pt-0 pb-0">
+                <div class="banner-main-desc mb-2">
+                    @if (!string.IsNullOrEmpty(Model.Stage_info?.Name))
+                    {
+                        <div class="m-4">
+                            <span class="h6 sub_t1_red text-center">@Html.DisplayNameForInnerType((Project s) => s.Stage)<span>: @Model.Stage_info.Name</span></span>
+                        </div>
+                    }
+                </div>
+
+                <div class="banner-main-desc">
+                    <ul class="list-inline details">
+                        <li>
+                            <span class="h4">@ViewBag.planned</span>
+                            <span title="Costo Planeado">Costo Inicial</span>
+                        </li>
+                        <li>
+                            <span class="h4">@ViewBag.programmed</span>
+                            <span title="Costo Programado">Costo Programado</span>
+                        </li>
+
+                        <li>
+                            <span class="h4">@ViewBag.expended</span>
+                            <span title="Pagado + Devengado">Total Pagado</span>
+                        </li>
+                        <li>
+                            <span class="h4">@ViewBag.balance</span>
+                            <span title="Costo Programado - Total Pagado">Por ejecutar</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        @*
+    <form>
+    <div class="banner-main-menu">
+    <div class="container">
+    <div class="row justify-content-center">
+    <div class="col-lg-10">
+    <ul class="list-inline details">
+    @if (base.User.IsInRole(ProjectGlobals.RoleAdmin))
+    {
+    <li>
+    <button type="submit" class="btn btn-clear" asp-area="" asp-controller="Payment" asp-action="Index">
+    <span><i class="bi-file-earmark-medical"></i>&nbsp; Pagos</span>
+    </button>
+    </li>
+    <li>
+    <button type="submit" class="btn btn-clear" asp-area="" asp-controller="Addition" asp-action="Index">
+    <span><i class="bi-currency-dollar"></i>&nbsp; Adiciones</span>
+    </button>
+    </li>
+    <li>
+    <button type="submit" class="btn btn-clear" asp-area="" asp-controller="Extension" asp-action="Index">
+    <span><i class="bi-calendar3"></i>&nbsp; Extensiones</span>
+    </button>
+    </li>
+    }
+    @if (base.User.IsInRole(ProjectGlobals.RoleAdmin)
+    || base.User.IsInRole(ProjectGlobals.RoleDireccion)
+    || base.User.IsInRole(ProjectGlobals.RoleOperacion)
+    || base.User.IsInRole(ProjectGlobals.RoleConsulta))
+    {
+    <li>
+    <a asp-area="Review" asp-controller="Media" asp-action="Index" asp-route-projectId="@Model" class="btn btn-clear">
+    <span><i class="bi-image"></i>&nbsp; Media</span>
+    </a>
+    </li>
+    }
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+    </form>
+    *@
+
+    </section>
+
+
+
+    <div id="barchart1" style="width: 900px; height: 300px;"></div>
+
+
+    <!-- Project -->
+    <partial name="_Project" />
+
+
+
+    <partial name="_ProjectFundings" />
+    <partial name="_Products" />
+    <partial name="_Payments" />
+    <partial name="_Additions" />
+    <partial name="_Extensions" />
+
+    <div class="mb-5"></div>
+    <div class="mb-5"></div>
+
+
+
+
+
+    <!--===================-->
+    <!--   Location    -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-7 col-md-10">
+                    <form>
+                        @if (!string.IsNullOrEmpty(Model.Location))
+                        {
+                            <h2>@Html.DisplayNameForInnerType((Project c) => c.Location)</h2>
+                            <div id="map" class="full-map-container"></div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--===================-->
+    <div class="mt-5">
+    </div>
+
+
+
+}
+
+<input name="dataChartFinance" id="dataChartFinance" value="@ViewBag.dataChartFinance" type="hidden" />
+<input name="dataChartPhysical" id="dataChartPhysical" value="@ViewBag.dataChartPhysical" type="hidden" />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
+<!-- Google charts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<!-- Map Manager -->
+<!-- geocoder: https://github.com/perliedman/leaflet-control-geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" integrity="sha384-gOibXC9S5JpMrpEP0ee6wCSVHjFSEuOzLLzTUmg58qM+mJ1rI8h/aY3lS9YUmo55" crossorigin="anonymous">
+<link rel="stylesheet" href="~/css/L.switchBasemap.css" />
+<script src="~/js/L.switchBasemap.js"></script>
+<script src="~/js/maplib.js"></script>
+<script>
+
+
+    if ('@Html.Raw(Model?.Location)' != '')
+        displayMap('map'
+            , '@Html.Raw(Model?.Location)'
+            , false, @ProjectGlobals.defaultLatitude, @ProjectGlobals.defaultLongitude);
+
+</script>
+
+
+
+
+
+
+
+<script>
+
+    // Google Charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChartFinance);
+    google.charts.setOnLoadCallback(drawChartPhysical);
+
+    function drawChartFinance() {
+        var data = google.visualization.arrayToDataTable(
+            JSON.parse(document.getElementById("dataChartFinance").value)
+        );
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {
+                calc: function (data, row) {
+                    return data.getValue(row, 1).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+                },
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2]);
+
+        var options = {
+            legend: { position: 'bottom' },
+            colors: ['#0072bb', '#bbbbbb'],
+            isStacked: 'percent',
+            chartArea: { width: '80%' },
+            //hAxis: { textPosition: 'none', gridlines: { count: 5 } },
+            // animation: { "startup": true, duration: 1000, easing: 'out' },
+
+            annotations: {
+                textStyle: {
+                    fontSize: 12,
+                    color: 'black', // Text color
+                }
+            }
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("chartFinance"));
+        chart.draw(view, options);
+    }
+
+    function drawChartPhysical() {
+
+        var data = google.visualization.arrayToDataTable(
+            JSON.parse(document.getElementById("dataChartPhysical").value)
+        );
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {
+                calc: function (data, row) {
+                    return data.getValue(row, 1).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+                },
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2]);
+
+        var options = {
+            legend: { position: 'bottom' },
+            colors: ['#0072bb', '#bbbbbb'],
+            isStacked: true,
+            chartArea: { width: '80%' },
+            hAxis: { textPosition: 'none', gridlines: { count: 5 } },
+            // animation: { "startup": true, duration: 1000, easing: 'out' },
+
+            annotations: {
+                textStyle: {
+                    fontSize: 12,
+                    color: 'black', // Text color
+                }
+            }
+
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById("chartPhysical"));
+        chart.draw(view, options);
+
+    }
+
+
+
+    // scrolldown for Project details
+    // NOT CURRENTLY BEING USED
+    $(document).ready(function () {
+    @if (ViewBag.animationValue == "animate")
+    {
+        <text>
+                $('html,body').animate({
+                    scrollTop: ($("#ProjectInfo").offset().top) - 200
+                }, 'slow');
+        </text>
+    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                });
+</script>
+
+
+

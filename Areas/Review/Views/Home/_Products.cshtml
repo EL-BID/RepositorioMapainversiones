@@ -1,0 +1,108 @@
+﻿@using IMRepo.Models.Domain;
+@using IMRepo.Models.Reports;
+
+
+
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <form>
+
+                    <!--=====================-->
+                    <!--Productos-->
+                    <div class="wrap-documents mb-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8"><h2>@ModelsTexts.Product.titlePlural</h2></div>
+                            <div class="col-lg-4">
+
+                                @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                {
+                                    <div class="mb-2">
+                                        <a asp-area="" asp-controller="Product" asp-action="Create" class="btn btn-link">
+                                            <span><i class="bi-plus"></i> Crear @Html.DisplayNameForInnerType((Product p) => p)</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+
+                        @if (Model?.Products?.Count > 0)
+                        {
+                            <div class="accordion" id="accordionProduct">
+
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th>@Html.DisplayNameForInnerType((Product p) => p.Name)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((Product p) => p.Cost)</th>
+                                                @if ((User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                {
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Product product in Model.Products)
+                                            {
+                                                <tr title="@product.Description">
+                                                    <td>
+                                                        @product.Name
+                                                    </td>
+                                                    <td class="numCel">
+                                                        @if (product?.Cost.HasValue == true)
+                                                        {
+                                                            @product.Cost.Value.ToString("n0")
+                                                        }
+                                                    </td>
+                                                    @*                                                    <td>
+                                            <span>
+                                            <span class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapseProduct" + @product.Id) aria-expanded="false" aria-controls=@("collapseProduct" + @product.Id)>
+                                            @if (product.ProductAttachments?.Count > 0)
+                                            {
+                                            <span>con anexos</span>
+                                            }
+                                            else
+                                            {
+                                            <span>sin anexos</span>
+                                            }
+                                            </span>
+                                            </span>
+                                            </td>
+                                            *@
+                                                    @if ((User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                    {
+                                                        <td title="modificar">
+                                                            <a asp-route-id="@product.Id" asp-area="" asp-controller="Product" asp-action="Edit" class="btn btn-link"><i class="bi-pencil"></i></a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td title="ver">
+                                                            <a asp-route-id="@product.Id" asp-area="" asp-controller="Product" asp-action="Display" class="btn btn-link"><i class="bi-eye"></i></a>
+                                                        </td>
+                                                    }
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

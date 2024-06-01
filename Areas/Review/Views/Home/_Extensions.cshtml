@@ -1,0 +1,223 @@
+﻿@using IMRepo.Models.Domain;
+@using IMRepo.Models.Reports;
+
+
+
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <form>
+                    <div class="wrap-documents mb-5">
+
+                        <!--================-->
+                        <!--   Extensions   -->
+                        <div class="row align-items-center">
+                            <div class="col-lg-8"><h2>@ModelsTexts.Extension.titlePlural</h2></div>
+                            <div class="col-lg-4">
+
+                                <!--   Add New Extension   -->
+                                @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                {
+                                    <div class="mb-2">
+                                        <a asp-area="" asp-controller="Extension" asp-action="Create" class="btn btn-link">
+                                            <span><i class="bi-plus"></i> Crear @Html.DisplayNameForInnerType((Extension p) => p)</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+
+                        <!--TOTALS -->
+                        @{
+                            PaymentTotalsModel summary = ViewBag.extensionTotals;
+                        }
+                        <div class="row">
+                            <div class="summUp">
+                                <div class="card-list">
+                                    <div class="card">
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Cantidad total</span>
+                                            <span class="label-number">
+                                                @if (summary.totalQty.HasValue)
+                                                {
+                                                    @summary.totalQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días totales</span>
+                                            <span class="label-number">
+                                                @if (summary.totalValue.HasValue)
+                                                {
+                                                    @summary.totalValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Por aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedQty.HasValue)
+                                                {
+                                                    @summary.requestedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días por aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary.requestedValue.HasValue)
+                                                {
+                                                    @summary.requestedValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Aprobadas</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedQty.HasValue)
+                                                {
+                                                    @summary.approvedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días aprobados</span>
+                                            <span class="label-number">
+                                                @if (summary.approvedValue.HasValue)
+                                                {
+                                                    @summary.approvedValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--totals -->
+                        <!-- LIST OF EXTENSIONS -->
+                        @if (Model?.Extensions?.Count > 0)
+                        {
+                            <div class="accordion" id="accordionExtension">
+
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="numCel">#</th>
+                                                <th>@Html.DisplayNameForInnerType((Extension p) => p.DateDelivery)</th>
+                                                <th>@Html.DisplayNameForInnerType((Extension p) => p.Stage)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((Extension p) => p.Days)</th>
+                                                <th>Anexos</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Extension extension in Model.Extensions)
+                                            {
+                                                <tr title="@extension.Motive">
+                                                    <td class="numCel">
+                                                        @extension.Code
+                                                    </td>
+                                                    <td class="dateCel">
+                                                        @extension.DateDelivery?.ToString("yyyy-MM-dd")
+                                                    </td>
+                                                    <td>
+                                                        @if (extension.Stage_info != null)
+                                                        {
+                                                            <span>@extension.Stage_info.Name</span>
+                                                        }
+                                                    </td>
+                                                    <td class="numCel">
+                                                        @extension.Days?.ToString("n0")
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <span class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapseExtension" + @extension.Id) aria-expanded="false" aria-controls=@("collapseExtension" + @extension.Id)>
+                                                                @if (extension.ExtensionAttachments?.Count > 0)
+                                                                {
+                                                                    <span>@extension.ExtensionAttachments.Count anexos</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>sin anexos</span>
+                                                                }
+                                                            </span>
+                                                        </span>
+                                                    </td>
+                                                    @if ((extension.Stage != 3) && (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                    {
+                                                        <td title="modificar">
+                                                            <a asp-route-id="@extension.Id" asp-area="" asp-controller="Extension" asp-action="Edit" class="btn btn-link"><i class="bi-pencil"></i></a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td title="ver">
+                                                            <a asp-route-id="@extension.Id" asp-area="" asp-controller="Extension" asp-action="Display" class="btn btn-link"><i class="bi-eye"></i></a>
+                                                        </td>
+                                                    }
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                    <!-- Attachments -->
+                                    <div class="col-xl-7 col-lg-9 col-md-11">
+                                        @foreach (Extension extension in Model.Extensions)
+                                        {
+                                            <div class="accordion-item bg-filled">
+                                                <div id=@("collapseExtension" + @extension.Id) class="accordion-collapse collapse" aria-labelledby=@("heading" + @extension.Id) data-bs-parent="#accordionExtension">
+                                                    <div class="accordion-body">
+                                                        <div class="container">
+                                                            <h6 class="mb-2">@ModelsTexts.Extension.AttachmentsTitle @Html.DisplayNameForInnerType((Extension p) => p) # @extension.Code</h6>
+                                                            @if (extension.ExtensionAttachments?.Count > 0)
+                                                            {
+                                                                @foreach (ExtensionAttachment extensionAttachment in extension.ExtensionAttachments)
+                                                                {
+                                                                    <div class="row">
+                                                                        <div class="col-8"><span>@extensionAttachment.Title</span></div>
+                                                                        <div class="col-4">
+                                                                            <a class="btn btn-link" asp-area="" asp-controller="ExtensionAttachment" asp-action="Download" asp-route-serverFileName="@extensionAttachment.FileName" asp-route-downloadName="@extensionAttachment.Title" asp-route-extensionId=@ViewBag.extensionId>
+                                                                                <i class="bi-download"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                            @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                                           || User.IsInRole(ProjectGlobals.RoleDireccion)
+                                                           || User.IsInRole(ProjectGlobals.RoleOperacion))
+                                                            {
+                                                                <a asp-route-extensionId=@extension.Id asp-area="" asp-controller="ExtensionAttachment" asp-action="Create" asp-route-extensionId=@ViewBag.extensionId class="btn btn-clear float-end">
+                                                                    <span><i class="bi-plus"></i>@JaosUITitles.buttonAdd @ModelsTexts.ExtensionAttachment.title</span>
+                                                                </a>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                        <!-- list of extensions -->
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

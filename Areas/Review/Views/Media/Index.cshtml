@@ -1,0 +1,152 @@
+﻿@using System.Globalization
+@using JaosLib.Services.Utilities;
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.ProjectImage>?
+@{
+    ViewData["Title"] = "Media";
+    ViewBag.WorkingInProject = true;
+    ViewBag.navMedia = "active";
+}
+
+
+
+
+
+<h3 class="mt-5 mb-0">@ModelsTexts.ProjectImage.titlePlural</h3>
+
+@if (User.IsInRole(ProjectGlobals.RoleAdmin)
+|| User.IsInRole(ProjectGlobals.RoleDireccion)
+|| User.IsInRole(ProjectGlobals.RoleOperacion))
+{
+    <div>
+        <a asp-route-projectId=@ViewBag.projectId asp-area="" asp-controller="ProjectImage" asp-action="Create" class="btn btn-clear float-end"><i class="bi-plus"></i> Agregar Imagen</a>
+    </div>
+}
+<form asp-action="Create" enctype="multipart/form-data" class="mt-5">
+    <div class="album py-5 bg-light mt-1">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var projectImage in Model)
+                    {
+                        <div class="col">
+                            <div class="card shadow-sm">
+
+                                <img src="@FileLoadService.PathProjectImages/@projectImage.File" class="bd-placeholder-img card-img-top" width="100%" height="225" aria-label="image" preserveAspectRatio="xMidYMid slice" focusable="false" alt=@projectImage.Description><title>Picture</title><rect width="100%" height="100%" fill="#55595c"></rect>
+                                <div class="card-body">
+                                    <div class="card-text">@projectImage.Description</div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            Cargada: @(projectImage.UploadDate?.ToString("dd-MMM-yyyy") ?? "")
+                                        </small>
+                                        @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                       || User.IsInRole(ProjectGlobals.RoleDireccion))
+                                        {
+                                            <button data-id="@projectImage.Id" data-route="/ProjectImage/delete/" type="button" class="btn  btn-link callDeleteConfirmation" data-toggle="modal" data-target="#DeleteConfirmation" data-message="Está a punto de eliminar la Imagen."><i class="bi-trash"></i></button>
+                                        }
+
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(projectImage.File))
+                                    {
+                                        <div class="text-center">
+                                            <a class="btn btn-outline-light" asp-area="" asp-controller="ProjectImage" asp-action="Download" asp-route-serverFileName="@projectImage.File" asp-route-downloadName="@projectImage.Description" asp-route-projectId=@ViewBag.projectId>
+                                                <i class="bi-download"></i>&nbsp; Descargar
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div>(No hay imágenes cargadas para el proyecto)</div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+<h3 class="mt-5 mb-0">@ModelsTexts.ProjectVideo.titlePlural</h3>
+
+@if (User.IsInRole(ProjectGlobals.RoleAdmin)
+|| User.IsInRole(ProjectGlobals.RoleDireccion)
+|| User.IsInRole(ProjectGlobals.RoleOperacion))
+{
+    <div>
+        <a asp-area="" asp-route-projectId=@ViewBag.projectId asp-controller="ProjectVideo" asp-action="Create" class="btn btn-clear float-end"><i class="bi-plus"></i> Agregar Video</a>
+    </div>
+}
+<form asp-action="Create" enctype="multipart/form-data" class="mt-5">
+    <div class="album py-5 bg-light mt-1">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                @if (ViewBag.videos != null && ViewBag.videos.Count > 0)
+                {
+                    @foreach (ProjectVideo video in ViewBag.videos)
+                    {
+                        <div class="col">
+                            <div class="card shadow-sm">
+
+                                <iframe class="bd-placeholder-img card-img-top" src="@video.Link" title="@video.Description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" fill="#55595c"></iframe>
+                                <div class="card-body">
+                                    <div class="card-text">@video.Description</div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            Cargada: @(video.UploadDate?.ToString("dd-MMM-yyyy") ?? "")
+                                        </small>
+                                        @if (User.IsInRole(ProjectGlobals.RoleAdmin)
+                                       || User.IsInRole(ProjectGlobals.RoleDireccion))
+                                        {
+                                            <button data-id="@video.Id" data-route="/ProjectImage/delete/" type="button" class="btn  btn-link callDeleteConfirmation" data-toggle="modal" data-target="#DeleteConfirmation" data-message="Está a punto de eliminar la Imagen."><i class="bi-trash"></i></button>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div>(No hay videos cargados para el proyecto)</div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+<div class="mt-5">
+    <a id="goBack" href="javascript:void(0);" formnovalidate class="btn btn-basic"><i class="bi-arrow-90deg-left"></i>&nbsp; Regresar</a>
+</div>
+
+
+
+<style>
+
+
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.callDeleteConfirmation').click(function () {
+            var id = this.getAttribute("data-id");
+            var route = this.getAttribute("data-route");
+            var message = this.getAttribute("data-message");
+            $('#DeleteConfirmationMessage').text(message);
+            var ele = document.getElementById('DeleteConfirmationButton');
+            ele.setAttribute('formaction', route + id);
+        });
+    });
+</script>
+

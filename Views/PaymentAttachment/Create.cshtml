@@ -1,0 +1,11 @@
+@using IMRepo.Models.Domain;
+@model PaymentAttachment
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleCreate, ModelsTexts.PaymentAttachment.title);
+    ViewData["Action"] = "Create";
+    ViewData["UpdateAvailable"] = true;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/PaymentAttachment/_PartialCapture.cshtml", ViewData)

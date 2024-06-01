@@ -1,0 +1,9 @@
+@model IMRepo.Models.Domain.Subsector
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.Subsector.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/Subsector/_PartialCapture.cshtml", ViewData)

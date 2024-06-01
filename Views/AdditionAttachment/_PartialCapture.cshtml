@@ -1,0 +1,99 @@
+@using IMRepo.Models.Domain;
+@model AdditionAttachment
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.AdditionAttachment.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormAdditionAttachment" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl"enctype="multipart/form-data">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE ADDITIONATTACHMENT PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divAddition">
+                <label asp-for="Addition" class="control-label" title=@ModelsTexts.AdditionAttachment.AdditionDescription></label>
+                @if (((int?)@ViewBag.additionId) != null && ((int?)@ViewBag.additionId).Value > 0)
+                {
+                    @Html.HiddenFor(m => m.Addition)
+                    <select disabled asp-for="Addition" name="Addition" class="form-select" asp-items="ViewBag.listAddition" id="Addition"></select>
+                }
+                else
+                {
+                    <select asp-for="Addition" name="Addition" class="form-select" asp-items="ViewBag.listAddition" id="Addition"></select>
+                }
+                <span asp-validation-for="Addition" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divTitle">
+                <label asp-for="Title" class="control-label" title=@ModelsTexts.AdditionAttachment.TitleDescription></label>
+                <input asp-for="Title" type="text" >
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-control" id="divFileName">
+                <label asp-for="FileName"  class="control-label"title=@ModelsTexts.AdditionAttachment.FileNameDescription></label>
+                @if (string.IsNullOrEmpty(Model.FileName))
+                {
+                    <input hidden id="FileNameInput" asp-for="FileNameInput" type="file" />
+                    <div class="input-group mb-3">
+                        <label id="FileNameButton" asp-for="FileNameInput" class="btn btn-outline-secondary" type="button"><i class="bi bi-upload"></i>&nbsp; Cargar Archivo</label>
+                        <input readonly id="FileName" asp-for="FileName" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    </div>
+                }
+                else
+                {
+                    <input hidden id="FileName" asp-for="FileName" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    <div class="input-group mb-3">
+                        <a class="btn btn-link" asp-area="" asp-controller="AdditionAttachment" asp-action="Download" asp-route-serverFileName="@Model.FileName" asp-route-downloadName=@ModelsTexts.AdditionAttachment.FileNameTitle asp-route-additionId=@ViewBag.additionId>
+                            <i class="bi-download"></i>&nbsp; Descargar
+                        </a>
+                    </div>
+                }
+                <span asp-validation-for="FileName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divDateAttached">
+                <label asp-for="DateAttached" class="control-label" title=@ModelsTexts.AdditionAttachment.DateAttachedDescription></label>
+                <input asp-for="DateAttached" type="date"  readonly>
+                <span asp-validation-for="DateAttached" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture additionattachment properties -->
+    <span data-model="AdditionAttachment"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of additionattachment form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display AdditionAttachment *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Addition').disabled = x;
+    document.getElementById('Title').disabled = x;
+    document.getElementById('FileName').disabled = x;
+    document.getElementById('DateAttached').disabled = x;
+</script>
+<!-- Attachments Manager for AdditionAttachment -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set listeners to display filename and button title.
+        setListeners('FileNameInput', 'FileName', 'FileNameButton');
+    });
+</script>

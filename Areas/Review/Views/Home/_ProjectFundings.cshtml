@@ -1,0 +1,172 @@
+﻿@using IMRepo.Models.Domain;
+@using IMRepo.Models.Reports;
+
+
+
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <form>
+                    <div class="wrap-documents mb-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8"><h2>@ModelsTexts.ProjectFunding.titlePlural</h2></div>
+                            <div class="col-lg-4">
+
+                                @if ((User.IsInRole(ProjectGlobals.RoleAdmin)
+                                || User.IsInRole(ProjectGlobals.RoleDireccion))
+                                && Model.Stage < 2)
+                                {
+                                    <div class="mb-2">
+                                        <a asp-area="" asp-controller="Payment" asp-action="Create" class="btn btn-link">
+                                            <span><i class="bi-plus"></i> Crear  @Html.DisplayNameForInnerType((ProjectFunding p) => p)</span>
+                                        </a>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+
+
+
+                        <!--TOTALS -->
+                        @{
+                            PaymentTotalsModel summary = ViewBag.projectFundingTotals;
+                        }
+                        <div class="row">
+                            <div class="summUp">
+                                <div class="card-list">
+                                    <div class="card">
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Cantidad total</span>
+                                            <span class="label-number">
+                                                @if (summary?.totalQty > 0)
+                                                {
+                                                    @summary.totalQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días totales</span>
+                                            <span class="label-number">
+                                                @if (summary?.totalValue > 0)
+                                                {
+                                                    @summary.totalValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Por aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary?.requestedQty > 0)
+                                                {
+                                                    @summary.requestedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días por aprobar</span>
+                                            <span class="label-number">
+                                                @if (summary?.requestedValue > 0)
+                                                {
+                                                    @summary.requestedValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Aprobadas</span>
+                                            <span class="label-number">
+                                                @if (summary?.approvedQty > 0)
+                                                {
+                                                    @summary.approvedQty.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="wrap-item-list">
+                                            <span class="label-dato">Días aprobados</span>
+                                            <span class="label-number">
+                                                @if (summary?.approvedValue > 0)
+                                                {
+                                                    @summary.approvedValue.Value.ToString("n0")
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--totals -->
+                        @if (Model?.ProjectFundings?.Count > 0)
+                        {
+                            <div class="accordion" id="accordionProjectFunding">
+
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th>@Html.DisplayNameForInnerType((ProjectFunding p) => p.Type_info)</th>
+                                                <th>@Html.DisplayNameForInnerType((ProjectFunding p) => p.Source_info)</th>
+                                                <th class="numCel">@Html.DisplayNameForInnerType((ProjectFunding p) => p.Value)</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (ProjectFunding projectFunding in Model.ProjectFundings)
+                                            {
+                                                <tr title=@(projectFunding?.Type_info?.Name ?? "")>
+                                                    <td>
+                                                        @if (projectFunding?.Type_info != null)
+                                                        {
+                                                            @projectFunding.Type_info.Name
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (projectFunding?.Source_info != null)
+                                                        {
+                                                            @projectFunding.Source_info.Name
+                                                        }
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @if (projectFunding.Value.HasValue)
+                                                        {
+                                                            @projectFunding.Value.Value.ToString("n0")
+                                                        }
+                                                    </td>
+
+                                                    @if ((Model.Stage < 2) && (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin)))
+                                                    {
+                                                        <td title="modificar">
+                                                            <a asp-route-id="@projectFunding.Id" asp-area="" asp-controller="ProjectFunding" asp-action="Edit" class="btn btn-link"><i class="bi-pencil"></i></a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td title="ver">
+                                                            <a asp-route-id="@projectFunding.Id" asp-area="" asp-controller="ProjectFunding" asp-action="Display" class="btn btn-link"><i class="bi-eye"></i></a>
+                                                        </td>
+                                                    }
+
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

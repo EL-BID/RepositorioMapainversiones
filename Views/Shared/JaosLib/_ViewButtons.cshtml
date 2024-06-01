@@ -1,0 +1,31 @@
+﻿<div class="mt-5">
+    @{
+        <!-- return button -->
+        if (!string.IsNullOrEmpty(ViewBag.returnUrl))
+        {
+            string returnlink = @ViewBag.returnUrl;
+            if (!string.IsNullOrEmpty(ViewBag.bufferedUrl))
+            {
+                if (!returnlink.Contains("returnUrl"))
+                {
+                    string separator = (returnlink.Contains('?')) ? "&" : "?";
+                    returnlink += string.Format("{0}returnUrl={1}", separator, ViewBag.bufferedUrl);
+                }
+            }
+            <a href=@returnlink formnovalidate class="btn btn-basic"><i class="bi-arrow-90deg-left"></i>&nbsp; @JaosUITitles.buttonReturn</a>
+        }
+        else
+        {
+            <a id="goBack" href="javascript:void(0);" formnovalidate class="btn btn-basic"><i class="bi-arrow-90deg-left"></i>&nbsp; @JaosUITitles.buttonReturn</a>
+        }
+    }
+    @if ((bool)(ViewData["DeleteAvailable"] ?? false))
+    {
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmation"><i class="bi bi-x-lg"></i>&nbsp; @JaosUITitles.buttonDelete</button>
+    }
+    @if ((bool)(ViewData["UpdateAvailable"] ?? false))
+    {
+        <button type="submit" @((ViewBag.ignoreNumberValidation ?? false) ? "formnovalidate " : "")class="btn btn-primary"><i class="bi bi-check-lg"></i>&nbsp; @JaosUITitles.buttonUpdate</button>
+    }
+</div>
+

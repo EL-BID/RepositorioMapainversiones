@@ -1,0 +1,73 @@
+﻿@using IMRepo.Models.Domain;
+@using System.Text.Json;
+@using IMRepo.Settings
+@{
+    string? textProject = Context.Session.GetString("project");
+    Project? sessionProject = (!string.IsNullOrEmpty(textProject)) ? JsonSerializer.Deserialize<Project>(textProject) : null;
+}
+
+
+
+
+
+<nav class="mob-main-mnu">
+    <div class="mob-main-mnu-content">
+        <ul class="mob-main-mnu-list">
+
+            <!-- Begin Authenticated Mobile Options -->
+            @if (@User.Identity?.IsAuthenticated ?? false)
+            {
+                @foreach (var menuItem in MainMenuOptions.MenuItems)
+                {
+
+                    @if (menuItem.AllowedRoles?.Any() == null || menuItem.AllowedRoles.Any(r => User.IsInRole(r)))
+                        @if (!menuItem.requiresProject || sessionProject?.Id > 0)
+                        {
+                            <li>
+                                @if (menuItem.SubItems?.Any() == null)
+                                {
+                                <li>
+                                    <a data-title="@menuItem.Title" asp-area="@menuItem.Area" asp-controller="@menuItem.Controller" asp-action="@menuItem.Action">
+                                        <span>@menuItem.Title</span>
+                                    </a>
+                                </li>
+                                }
+                                else
+                                {
+                                <a href="#!" data-title="@menuItem.Title">
+                                    <span>@menuItem.Title</span>
+                                </a>
+
+                                <div class="mmm-btn"><i class="material-icons md-24">expand_more</i></div>
+                                <div class="mob-main-submnu">
+                                    <div class="mob-main-submnu-item">
+                                        <ul>
+                                                @foreach (var subMenuItem in menuItem.SubItems)
+                                                {
+                                                    @if (subMenuItem.AllowedRoles?.Any() == null || subMenuItem.AllowedRoles.Any(r => User.IsInRole(r)))
+                                                        @if (!subMenuItem.requiresProject || sessionProject?.Id > 0)
+                                                        {
+                                                        <li @(subMenuItem.endWithSeparator ? @"class=withSeparator" : "")>
+                                                            <a data-title="@subMenuItem.Title" asp-area="@subMenuItem.Area" asp-controller="@subMenuItem.Controller" asp-action="@subMenuItem.Action">
+                                                                <span>@subMenuItem.Title</span>
+                                                            </a>
+                                                        </li>
+
+                                                        }
+                                                }
+                                        </ul>
+                                    </div>
+                                </div>
+                                }
+                            </li>
+                        }   }
+            }
+            <!-- end Authenticated Mobile Options -->
+
+            <partial name="_LoginPartial" />
+
+        </ul>
+    </div>
+</nav>
+
+

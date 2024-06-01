@@ -1,0 +1,75 @@
+@using IMRepo.Models.Domain;
+@model Product
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Product.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProduct" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PRODUCT PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.Product.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divCost">
+                <label asp-for="Cost" class="control-label" title=@ModelsTexts.Product.CostDescription></label>
+                @Html.TextBoxFor(m => m.Cost, "{0:n2}", new { @onchange = "formatNumber(this,2);" })
+                <span class="text-danger">@ViewBag.CostValidationMsg</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divDescription">
+                <label asp-for="Description" class="control-label" title=@ModelsTexts.Product.DescriptionDescription></label>
+                <textarea asp-for="Description" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divObjective">
+                <label asp-for="Objective" class="control-label" title=@ModelsTexts.Product.ObjectiveDescription></label>
+                <textarea asp-for="Objective" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Objective" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture product properties -->
+    <span data-model="Product"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of product form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Product *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Project').disabled = x;
+    document.getElementById('Name').disabled = x;
+    document.getElementById('Cost').disabled = x;
+    document.getElementById('Description').disabled = x;
+    document.getElementById('Objective').disabled = x;
+</script>

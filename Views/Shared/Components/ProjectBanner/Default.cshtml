@@ -1,0 +1,24 @@
+﻿@model IMRepo.Models.Domain.Project
+@{
+}
+
+
+<section class="section bg-plain">
+    <div class="container">
+        @if (Model != null)
+        {
+            <div class="banner-main-info">
+                <div class="banner-main-desc">
+                    <h4 class="text-center sub_t2_red">
+                        <span>Code: @Model.Code</span>
+                    </h4>
+                </div>
+                <div class="banner-main-title">
+                    <h1 class="mainTit_t1 text-center">
+                        <span>@Model.Name</span>
+                    </h1>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,40 @@
+@using IMRepo.Models.Domain;
+@model FundingType
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.FundingType.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormFundingType" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE FUNDINGTYPE PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divName">
+                <label asp-for="Name" class="control-label" title=@ModelsTexts.FundingType.NameDescription></label>
+                <input asp-for="Name" type="text" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture fundingtype properties -->
+    <span data-model="FundingType"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of fundingtype form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display FundingType *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Name').disabled = x;
+</script>

@@ -1,0 +1,61 @@
+@using IMRepo.Models.Domain;
+@model ProjectFunding
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.ProjectFunding.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProjectFunding" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PROJECTFUNDING PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div  class="form-control"id="divType">
+                <label asp-for="Type" class="control-label" title=@ModelsTexts.ProjectFunding.TypeDescription></label>
+                <select asp-for="Type" name="Type" class="form-select" asp-items="ViewBag.listType" id="Type"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div  class="form-control"id="divSource">
+                <label asp-for="Source" class="control-label" title=@ModelsTexts.ProjectFunding.SourceDescription></label>
+                <select asp-for="Source" name="Source" class="form-select" asp-items="ViewBag.listSource" id="Source"></select>
+                <span asp-validation-for="Source" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div  class="form-control"id="divValue">
+                <label asp-for="Value" class="control-label" title=@ModelsTexts.ProjectFunding.ValueDescription></label>
+                @Html.TextBoxFor(m => m.Value, "{0:n2}", new { @onchange = "formatNumber(this,2);" })
+                <span class="text-danger">@ViewBag.ValueValidationMsg</span>
+            </div>
+        </div>
+    </div>
+    <!-- capture projectfunding properties -->
+    <span data-model="ProjectFunding"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of projectfunding form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display ProjectFunding *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Project').disabled = x;
+    document.getElementById('Type').disabled = x;
+    document.getElementById('Source').disabled = x;
+    document.getElementById('Value').disabled = x;
+</script>

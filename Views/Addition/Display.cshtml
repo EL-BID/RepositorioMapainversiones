@@ -1,0 +1,11 @@
+@using IMRepo.Models.Domain;
+@model IMRepo.Models.Domain.Addition
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.Addition.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/Addition/_PartialCapture.cshtml", ViewData)

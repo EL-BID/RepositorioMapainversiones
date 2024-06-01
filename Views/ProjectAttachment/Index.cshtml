@@ -1,0 +1,79 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.ProjectAttachment>?
+@{
+    ViewData["Title"] = "Anexos Proyecto";
+    ViewBag.WorkingInProject = true;
+}
+
+<form asp-action="Index" asp-controller="ProjectAttachment" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="ProjectAttachment"  asp-action="Create" asp-route-projectId=@ViewBag.projectId class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Anexo Proyecto</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select ProjectAttachment table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Anexo Proyecto</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "ProjectAttachment", new { sortOrder = @ViewBag.titleSort})>
+                            @Html.DisplayNameForInnerType((ProjectAttachment s) => s.Title) <i class=@ViewBag.titleIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        Descargar
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "ProjectAttachment", new { sortOrder = @ViewBag.dateAttachedSort})>
+                            @Html.DisplayNameForInnerType((ProjectAttachment s) => s.DateAttached) <i class=@ViewBag.dateAttachedIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var projectAttachment in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@projectAttachment.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => projectAttachment.Title)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-area="" asp-controller="ProjectAttachment" asp-action="Download" asp-route-serverFileName="@projectAttachment.FileName" asp-route-downloadName="@projectAttachment.Title" asp-route-projectId=@ViewBag.projectId class="btn btn-link">
+                                    <i class="bi-download"></i>
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@projectAttachment.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => projectAttachment.DateAttached)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@projectAttachment.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.ProjectAttachment.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.ProjectAttachment.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)

@@ -1,0 +1,56 @@
+﻿<form asp-action="Export">
+    <div class="container mt-5 mb-5">
+        <div class="mt-5">
+            <button type="submit" class="btn btn-primary float-end"><i class="bi bi-check-lg"></i> Exportar</button>
+        </div>
+    </div>
+</form>
+
+@*<div class="text-center"><h2>@Model.reportTitle</h2></div>
+*@
+<div class="text-center"><h4>@Model.reportSubtitle</h4></div>
+
+
+<div class="container-fluid mb-3">
+    <div class="table-responsive">
+        <table class="table table-hover t-reports">
+            <thead class="head-title-tab">
+                @foreach (var headRow in Model.headerRows)
+                {
+                    <tr>
+                        @foreach (var headCell in headRow.cells)
+                        {
+                            @if (!string.IsNullOrEmpty(headCell.cssClass))
+                            {
+                                <th class="@headCell.cssClass">@headCell.toString()</th>
+                            }
+                            else
+                            {
+                                <th>@headCell.toString()</th>
+                            }
+                        }
+                    </tr>
+                }
+            </thead>
+            @foreach (var row in Model.rows)
+            {
+                <tr>
+                    @foreach (var cell in row.cells)
+                    {
+                        @if (!string.IsNullOrEmpty(cell.cssClass))
+                        {
+                            <td class="@cell.cssClass">@cell.toString()</td>
+                        }
+                        else
+                        {
+                            <td>@cell.toString()</td>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<style>
+    <link rel="stylesheet" href="~/css/reportTable.css" asp-append-version="true" / >
+</style>

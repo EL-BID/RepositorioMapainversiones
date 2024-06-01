@@ -1,0 +1,291 @@
+﻿@using IMRepo.Models.Domain;
+@using System.Text.Json;
+@{
+    string? textProject = Context.Session.GetString("project");
+    Project? sessionProject = (!string.IsNullOrEmpty(textProject)) ? JsonSerializer.Deserialize<Project>(textProject) : null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="utf-8">
+
+    <title>@ProjectGlobals.ProjectTitle</title>
+
+    <meta name="description" content="Description">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+
+
+    <!-- Standard Design -->
+    <link rel="icon" href="~/assets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="~/assets/css/libs.css">
+
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="~/assets/fonts/material-design-icons/material-design-icons.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="~/assets/fonts/material-design-icons/material-design-icons-outlined.woff2" as="font" type="font/woff2" crossorigin>
+    <!--components -->
+    <link href="~/assets/css/components.css" rel="stylesheet">
+
+
+    <!--JAOS -->
+    <!-- Bootstrap icons  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU" crossorigin="anonymous">
+
+    <!-- Include CSS stylesheets -->
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha384-5IbgsdqrjF6rAX1mxBZkKRyUOgEr0/xCGkteJIaRKpvW0Ag0tf6lru4oL2ZhcMvo" crossorigin="anonymous">
+
+    <!-- Searchable Select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha384-KZO2FRYNmIHerhfYMjCIUaJeGBRXP7CN24SiNSG+wdDzgwvxWbl16wMVtWiJTcMt" crossorigin="anonymous">
+
+    <!-- Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha384-VzLXTJGPSyTLX6d96AxgkKvE/LRb7ECGyTxuwtpjHnVWVZs2gp5RDjeM/tgBnVdM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css">
+    <!--custom -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+    <!-- JAOS scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
+    <script src="~/lib/Leaflet/leaflet.js"></script>
+    <script src="https://unpkg.com/@@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js" integrity="sha384-rGCFEOuLo3qUtZTJs5enHPutiikUQ6AJroPg2rQqOhmXBPmZdvhwK2aCmkhe9gwo" crossorigin="anonymous"></script>
+
+    <style>
+        .equal-height {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+
+</head>
+
+
+
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- Begin header -->
+    @if (!(ViewBag.LoginIn ?? false))
+    {
+        <!-- Mobile Main Menu -->
+        <partial name="_MobileMainMenu" />
+
+        <header class="header">
+            <!-- HEADER -->
+            <nav class="header-fixed">
+                <div class="container">
+                    <div class="row flex-nowrap align-items-center justify-content-between">
+                        <div class="col-auto d-block d-lg-none header-fixed-col">
+                            <div class="main-mnu-btn">
+                                <span class="bar bar-1"></span>
+                                <span class="bar bar-2"></span>
+                                <span class="bar bar-3"></span>
+                                <span class="bar bar-4"></span>
+                            </div>
+                        </div>
+                        <div class="col-auto header-fixed-col">
+                            <!-- Begin logo -->
+                            @if (base.User.IsInRole(ProjectGlobals.RoleDireccion)
+                           || base.User.IsInRole(ProjectGlobals.RoleOperacion)
+                           || base.User.IsInRole(ProjectGlobals.RoleAdmin)
+                           || base.User.IsInRole(ProjectGlobals.RoleConsulta)
+                           )
+                            {
+
+                                <!-- Begin logo -->
+                                <a class="logo logo-ico-widht-text" asp-area="Review" asp-controller="Dashboard" asp-action="Index" title="ir al tablero">
+                                    <img class="lazy logo-ico" src="~/assets/img/remi-es.svg" alt="Repositorio MapaInversiones" data-loaded="true">
+                                </a>
+                            }
+                            else
+                            {
+                                <!-- Begin logo -->
+                                <a class="logo logo-ico-widht-text" asp-area="Identity" asp-controller="Account" asp-action="Login" title="login">
+                                    <img class="lazy logo-ico" src="~/assets/img/remi-es.svg" alt="Repositorio MapaInversiones" data-loaded="true">
+                                </a>
+                            }
+                        </div>
+                        <div class="col-lg col-auto col-static header-fixed-col">
+                            <div class="row flex-nowrap align-items-center justify-content-end">
+                                <div class="col-auto header-fixed-col d-none d-lg-block col-static">
+                                    <!-- Main Menu -->
+                                    <partial name="_MainMenu" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- End header fixed -->
+
+        </header>
+        <!-- End header -->
+
+
+        <!-- Project Information Header -->
+        @if ((sessionProject != null) && ViewBag.WorkingInProject ?? false)
+        {
+            <a class="btn-clear" asp-area="Review" asp-controller="Home" asp-action="Index" title="ir a resumen">
+                <div class="banner-main-info bg-plain mb-0 pt-2 pb-2">
+                    <div class="miniTitle">Proyecto</div>
+                    <h4 class="mainTit_t1 text-center">@sessionProject!.Name</h4>
+                    <div class="banner-main-desc">
+                        <div class="badge rounded-pill data-pill col-xs-8 col-lg-3">
+                            <span class="miniTitle">Código:</span><span> @sessionProject.Code</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    }
+
+
+
+
+    @if (ViewBag.NoContainer == true)
+    {
+        <!-- View Title -->
+        @if (!string.IsNullOrEmpty((string?)ViewData["Title"]) && !(ViewBag.NoTitle ?? false))
+        {
+            <div class="container mt-4">
+                <h2>@ViewBag.Title</h2>
+            </div>
+        }
+        @RenderBody()
+    }
+    else if (ViewBag.IsBasicView == true)
+    {
+        <div class="section bg-white">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="bg-white col-xl-9">
+                        @if (!string.IsNullOrEmpty((string?)ViewData["Title"]) && !(ViewBag.NoTitle ?? false))
+                        {
+                            <div class="mt-3">
+                                <h2>@ViewData["Title"]</h2>
+                            </div>
+                        }
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <section class="section bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="wrap-documents mb-5">
+                        <!-- View Title -->
+                        @if (!string.IsNullOrEmpty((string?)ViewData["Title"]) && !(ViewBag.NoTitle ?? false))
+                        {
+                            <div class="container mt-4">
+                                <h2>@ViewData["Title"]</h2>
+                            </div>
+                        }
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+
+    <div class="mb-5"></div>
+
+    @*
+    <div class="container">
+    <main role="main" class="pb-3">
+    </main>
+    </div>
+    *@
+
+
+
+
+
+
+
+    <!-- FOOTER -->
+    <footer class="footer mt-auto">
+        <div class="footer-main">
+            <div class="container">
+
+                <div class="col-lg-12 text-center">
+                    <a href="" target="_blank">
+                        <img src="~/assets/img/logo-bid.png" alt="Banco interamericano de desarrollo - BID">
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </footer>
+    <!-- End footer -->
+
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+
+
+
+    @*    <script src="~/assets/libs/jquery/jquery.min.js"></script>*@
+    <script src="~/assets/libs/lozad/lozad.min.js"></script>
+    <script src="~/assets/libs/device/device.js"></script>
+    <script src="~/assets/libs/ScrollToFixed/jquery-scrolltofixed-min.js"></script>
+    <script src="~/assets/libs/spincrement/jquery.spincrement.min.js"></script>
+    <script src="~/assets/libs/jquery-popup-overlay-gh-pages/jquery.popupoverlay.js"></script>
+    <script src="~/assets/libs/jquery-validation-1.19.3/jquery.validate.min.js"></script>
+    <script src="~/assets/libs/autosize-master/autosize.min.js"></script>
+    <script src="~/assets/libs/flickity/flickity.pkgd.min.js"></script>
+    <script src="~/assets/libs/flickity/flickity-imagesloaded.js"></script>
+    <script src="~/assets/libs/flickity/bg-lazyload.js"></script>
+    <script src="~/assets/libs/flickity/flickity-fade.js"></script>
+    <script src="~/assets/libs/isotope/isotope.pkgd.min.js"></script>
+    <script src="~/assets/libs/lightGallery/js/picturefill.min.js"></script>
+    <script src="~/assets/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="~/assets/libs/lightGallery/js/jquery.mousewheel.min.js"></script>
+    <script src="~/assets/libs/jquery-ui-range/jquery-ui.min.js"></script>
+    <script src="~/assets/js/custom.js"></script>
+
+
+
+
+    <!--JAOS script includes-->
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Searchable Select  -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" integrity="sha384-d3UHjPdzJkZuk5H3qKYMLRyWLAQBJbby2yr2Q58hXXtAGF8RSNO9jpLDlKKPv5v3" crossorigin="anonymous"></script>
+
+    <!-- Alert Popup  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.1" integrity="sha384-4exH6P3iDk3Qb60OKAtQn7jqlOxYCChJzz7K/+TE+entkac8ZW/Sk2tFEsMaFn6/" crossorigin="anonymous"></script>
+    <!-- Required by sweetalert2  -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- Date picker used to capture yyyy/MMM  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha384-duAtk5RV7s42V6Zuw+tRBFcqD8RjRKw6RFnxmxIj1lUGAQJyum/vtcUQX8lqKQjp" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js" integrity="sha384-iO46lWIREYImaEcgCJWPFSrSpys/xrefXKXie8J43T8Eg5gEiX6+ZF3PmfZpN3te" crossorigin="anonymous"></script>
+    <!--JAOS js-->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+</body>
+</html>
+
+

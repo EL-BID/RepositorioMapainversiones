@@ -1,0 +1,9 @@
+@model IMRepo.Models.Domain.PaymentStage
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.PaymentStage.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/PaymentStage/_PartialCapture.cshtml", ViewData)

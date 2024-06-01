@@ -1,0 +1,166 @@
+﻿@model IMRepo.Models.Domain.Project
+@using IMRepo.Areas.Review.Models;
+@using IMRepo.Models.Domain;
+
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 mt-5">
+                <h2>Infomación general del Proyecto</h2>
+                <div class="row mb-5">
+                    <!--PROJECT INFO-->
+                    <div class="info-table col-lg-6  mt-2">
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.CodeTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                <span>@Model.Code</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.OfficeTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @if (Model.Office_info != null)
+                                {
+                                    <span>@Model.Office_info.Name</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.ExecutingAgencyTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @if (Model.ExecutingAgency_info != null)
+                                {
+                                    <span>@Model.ExecutingAgency_info.Name</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.SectorTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @if (Model.Sector_info != null)
+                                {
+                                    <span>@Model.Sector_info.Name</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.SubsectorTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @if (Model.Subsector_info != null)
+                                {
+                                    <span>@Model.Subsector_info.Name</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.SdgTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @if (Model.Sdg_info != null)
+                                {
+                                    <span>@Model.Sdg_info.Title</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.PlannedDurationTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                @Html.DisplayFor(model => model.PlannedDuration)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                Duración ajustada
+                            </div>
+                            <div class="text-end col-md-6">
+                                @ViewBag.revisedDuration
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.PlannedStartDateTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                <span>@Html.DisplayFor(model => model.PlannedStartDate)</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-start col-md-6">
+                                @ModelsTexts.Project.ActualStartDateTitle
+                            </div>
+                            <div class="text-end col-md-6">
+                                <span>@Html.DisplayFor(model => model.ActualStartDate)</span>
+                            </div>
+                        </div>
+                        @if (ViewBag.ActualEndDate != null)
+                        {
+                            <div class="row">
+                                <div class="text-start col-md-6">
+                                    @ModelsTexts.Project.ActualEndDateTitle
+                                </div>
+                                <div class="text-end col-md-6">
+                                    @ViewBag.ActualEndDate
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <!--project info-->
+
+                    <div class="col-lg-6">
+                        <!--CHARTS-->
+                        <div class="info-table">
+                            <div class="row ml-1 mb-3">
+                                <H4 class="mb-0 text-center">Avance físico</H4>
+                                <div id="chartPhysical" style="width: 100%; height: 100px"></div>
+                            </div>
+                            <div class="row ml-1 mb-3">
+                                <H4 class="mb-0 text-center">Avance financiero</H4>
+                                <div id="chartFinance" style="width: 100%; height: 100px"></div>
+                            </div>
+                        </div>
+                        <!--charts-->
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-center">
+                        <a class="btn btn-outline-light" asp-area="Review" asp-controller="Media" asp-action="Index" asp-route-projectId=@Model.Id>
+                            <i class="bi-camera"></i>&nbsp; Fotos y Videos
+                        </a>
+                    </div>
+                </div>
+
+                @if (Model.Description != null)
+                {
+                    <div class="row mb-5">
+                        <h4>Descripción</h4>
+                        <span>@Model?.Description</span>
+                    </div>
+                }
+                @if (Model.Objectives != null)
+                {
+                    <div class="row mb-5">
+                        <h4>Objetivos</h4>
+                        <span>@Model?.Objectives</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,77 @@
+﻿@using IMRepo.Models.Domain;
+@model List<Extension>
+@{
+    Layout = "_ApprovalLayout";
+    ViewBag.navExtension = "active";
+}
+
+
+
+
+
+
+@if (Model?.Count > 0)
+{
+    <h4 class="mb-4">Extensiones pendientes de aprobación</h4>
+
+    <table>
+        <thead>
+            <tr>
+                @if (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin))
+                {
+                    <th></th>
+                }
+                <th>@Html.DisplayNameForInnerType((Extension e) => e.Project_info)</th>
+                <th>@Html.DisplayNameForInnerType((Extension e) => e.DateDelivery)</th>
+                <th>@Html.DisplayNameForInnerType((Extension e) => e.Motive)</th>
+                <th class="numCel">@Html.DisplayNameForInnerType((Extension e) => e.Days)</th>
+                <th>@Html.DisplayNameForInnerType((Extension e) => e.Stage)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Extension extension in Model)
+            {
+                <tr>
+                    @if (User.IsInRole(ProjectGlobals.RoleDireccion) || User.IsInRole(ProjectGlobals.RoleAdmin))
+                    {
+                        <td title="modificar">
+                            <a asp-route-id="@extension.Id" asp-area="" asp-controller="Extension" asp-action="Edit" class="btn btn-clear"><i class="bi-pencil"></i></a>
+                        </td>
+                    }
+                    <td>
+                        @if (extension.Project_info?.Id > 0)
+                        {
+                            @extension.Project_info?.Name
+                        }
+                    </td>
+                    <td>
+                        @if (extension.DateDelivery != DateTime.MinValue)
+                        {
+                            @extension.DateDelivery?.ToString("yyyy-MMM-dd")
+                        }
+                    </td>
+                    <td>
+                        @extension.Motive
+                    </td>
+                    <td class="numCel">
+                        @if (extension.Days > 0)
+                        {
+                            @extension.Days?.ToString("n0")
+                        }
+                    </td>
+                    <td>
+                        @if (extension.Stage_info != null)
+                        {
+                            <span>@extension.Stage_info.Name</span>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encuentran Extensiones pendientes de aprobación.</p>
+}

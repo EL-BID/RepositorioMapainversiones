@@ -1,0 +1,12 @@
+@using IMRepo.Models.Domain;
+@model Sdg
+@{
+    ViewData["ModelId"] = Model.Id;
+    ViewData["DeleteAvailable"] = true;
+    ViewData["Title"] = string.Format(JaosUITitles.titleEdit, ModelsTexts.Sdg.title);
+    ViewData["Action"] = "Edit";
+    ViewData["UpdateAvailable"] = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/Sdg/_PartialCapture.cshtml", ViewData)

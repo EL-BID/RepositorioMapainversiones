@@ -1,0 +1,72 @@
+@using IMRepo.Models.Domain;
+@model ProjectVideo
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.ProjectVideo.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProjectVideo" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PROJECTVIDEO PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divLink">
+                <label asp-for="Link" class="control-label" title=@ModelsTexts.ProjectVideo.LinkDescription></label>
+                <input asp-for="Link" type="text" >
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divDescription">
+                <label asp-for="Description" class="control-label" title=@ModelsTexts.ProjectVideo.DescriptionDescription></label>
+                <textarea asp-for="Description" type="text" rows="5" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divVideoDate">
+                <label asp-for="VideoDate" class="control-label" title=@ModelsTexts.ProjectVideo.VideoDateDescription></label>
+                <input asp-for="VideoDate" type="date" >
+                <span asp-validation-for="VideoDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div  class="form-control"id="divUploadDate">
+                <label asp-for="UploadDate" class="control-label" title=@ModelsTexts.ProjectVideo.UploadDateDescription></label>
+                <input asp-for="UploadDate" type="date"  readonly>
+                <span asp-validation-for="UploadDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture projectvideo properties -->
+    <span data-model="ProjectVideo"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of projectvideo form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display ProjectVideo *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Project').disabled = x;
+    document.getElementById('Link').disabled = x;
+    document.getElementById('Description').disabled = x;
+    document.getElementById('VideoDate').disabled = x;
+    document.getElementById('UploadDate').disabled = x;
+</script>

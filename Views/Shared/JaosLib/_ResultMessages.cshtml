@@ -1,0 +1,28 @@
+﻿@if (!string.IsNullOrEmpty(ViewBag?.okMessage))
+{
+    <div class="alert alert-success mt-3 mb-3" data-bs-toggle="collapse" data-bs-target="#collapseDebug" aria-controls="collapseDebug">
+        @Html.Raw( @ViewBag?.okMessage)
+    </div>
+}
+@if (!string.IsNullOrEmpty(ViewBag?.warningMessage))
+{
+    <div class="alert alert-warning mt-3 mb-3" data-bs-toggle="collapse" data-bs-target="#collapseDebug" aria-controls="collapseDebug">
+        @Html.Raw( @ViewBag?.warningMessage)
+    </div>
+    <div id="collapseDebug" class="accordion-collapse collapse">
+        <div class="accordion-body">
+            @Html.Raw( @ViewBag?.debugMessage)
+        </div>
+    </div>
+}
+@if (!string.IsNullOrEmpty(ViewBag?.errorMessage))
+{
+    <div class="alert alert-danger mt-3 mb-3" data-bs-toggle="collapse" data-bs-target="#collapseDebugError" aria-controls="collapseDebugError">
+        @Html.Raw( @ViewBag?.errorMessage)
+    </div>
+    <div id="collapseDebugError" class="accordion-collapse collapse">
+        <div class="accordion-body">
+            @Html.Raw( @ViewBag?.debugErrorMessage)
+        </div>
+    </div>
+}

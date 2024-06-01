@@ -1,0 +1,51 @@
+@using IMRepo.Models.Domain;
+@model Sdg
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.Sdg.title;
+    ViewBag.ignoreNumberValidation = true;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormSdg" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE SDG PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divNumber">
+                <label asp-for="Number" class="control-label" title=@ModelsTexts.Sdg.NumberDescription></label>
+                @Html.TextBoxFor(m => m.Number, "{0:d}")
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divTitle">
+                <label asp-for="Title" class="control-label" title=@ModelsTexts.Sdg.TitleDescription></label>
+                <input asp-for="Title" type="text" >
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture sdg properties -->
+    <span data-model="Sdg"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of sdg form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display Sdg *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Number').disabled = x;
+    document.getElementById('Title').disabled = x;
+</script>

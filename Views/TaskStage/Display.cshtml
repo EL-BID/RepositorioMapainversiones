@@ -1,0 +1,9 @@
+@model IMRepo.Models.Domain.TaskStage
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.TaskStage.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/TaskStage/_PartialCapture.cshtml", ViewData)

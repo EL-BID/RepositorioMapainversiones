@@ -1,0 +1,80 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.UserProfile>?
+@{
+    ViewData["Title"] = "Perfiles de Usuario";
+}
+
+<form asp-action="Index" asp-controller="UserProfile" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="UserProfile"  asp-action="Create" class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Perfil de Usuario</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select UserProfile table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Perfil de Usuario</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "UserProfile", new { sortOrder = @ViewBag.emailSort})>
+                            @Html.DisplayNameForInnerType((UserProfile s) => s.Email) <i class=@ViewBag.emailIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "UserProfile", new { sortOrder = @ViewBag.nameSort})>
+                            @Html.DisplayNameForInnerType((UserProfile s) => s.Name) <i class=@ViewBag.nameIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "UserProfile", new { sortOrder = @ViewBag.surnameSort})>
+                            @Html.DisplayNameForInnerType((UserProfile s) => s.Surname) <i class=@ViewBag.surnameIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var userProfile in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@userProfile.Id" asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => userProfile.Email)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@userProfile.Id" asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => userProfile.Name)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@userProfile.Id" asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => userProfile.Surname)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@userProfile.Id" asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.UserProfile.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.UserProfile.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)

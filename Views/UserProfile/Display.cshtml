@@ -1,0 +1,9 @@
+@model IMRepo.Models.Domain.UserProfile
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.UserProfile.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/UserProfile/_PartialCapture.cshtml", ViewData)

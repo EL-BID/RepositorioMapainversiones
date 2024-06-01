@@ -1,0 +1,6 @@
+﻿@await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml", ViewData)
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ViewButtons.cshtml", ViewData)
+@if ((int)(ViewData["ModelId"] ?? 0) > 0)
+{
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_DeleteConfirmation.cshtml", ViewData)
+}

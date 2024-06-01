@@ -1,0 +1,10 @@
+@using IMRepo.Models.Domain;
+@model FundingAgency
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleCreate, ModelsTexts.FundingAgency.title);
+    ViewData["Action"] = "Create";
+    ViewData["UpdateAvailable"] = true;
+    ViewData["isBasicView"] = true;
+}
+
+@await Html.PartialAsync("/Views/FundingAgency/_PartialCapture.cshtml", ViewData)

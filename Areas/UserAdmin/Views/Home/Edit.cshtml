@@ -1,0 +1,75 @@
+﻿@model JaosLib.Areas.UserAdmin.Models.UserProfileModel
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleEdit, ModelsTexts.UserProfile.title);
+}
+
+<form asp-action="Edit" class="mt-5" asp-route-mail="@Model.Email">
+    <div class="col-sm-12 col-md-11 col- col-lg-9 col-xl-8">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group mb-3" hidden>
+            <label asp-for="AspNetUserId" class="control-label" title="The user Id in the AspNetUsers Identity table."></label>
+            <input asp-for="AspNetUserId" type="text" class="form-control">
+            <span asp-validation-for="AspNetUserId" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="form-group mb-3 col-sm-6">
+                <label asp-for="role" class="control-label"></label>
+                <select id="selectRole" class="form-select" asp-for="role" asp-items="ViewBag.Roles"></select>
+                <span asp-validation-for="role" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3 col-sm-6">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" asp-for-mail="" type="email" class="form-control" readonly="readonly" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group mb-3 col-sm-6">
+                <label asp-for="Name" class="control-label" title="User Name"></label>
+                <input asp-for="Name" type="text" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3 col-sm-6">
+                <label asp-for="Surname" class="control-label" title="User's surname"></label>
+                <input asp-for="Surname" type="text" class="form-control">
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group mb-3 col-sm-6">
+                <div id="divMDA">
+                    <label asp-for="Office" class="control-label" title="La oficina o dependencia a la que se encuentra vinculado el usuario.">MDA</label>
+                    <select id="selectMDA" asp-for="Office" id="selectMDA" class="form-select" asp-items="ViewBag.listMinistry"></select>
+                    <span asp-validation-for="Office" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mb-3 col-sm-6">
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Notes" class="control-label" title="Notes or comments regarding the user or additional user information."></label>
+            <textarea asp-for="Notes" type="text" rows="5" class="form-control"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+
+        @*show user messages*@
+        @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml", ViewData)
+
+        <div class="mt-5">
+            <a id="goBack" href="javascript:void(0);" class="btn btn-basic"><i class="bi-arrow-90deg-left"></i>&nbsp; Return</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i>&nbsp; Submit</button>
+        </div>
+
+
+
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

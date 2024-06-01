@@ -1,0 +1,424 @@
+﻿@model DashboardViewModel
+@using IMRepo.Areas.Review.Models;
+@using IMRepo.Models.Domain;
+@using IMRepo.Services.basic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using IMRepo.Services.Utilities;
+@{
+    ViewData["Title"] = "";
+    ViewBag.navDashboard = "active";
+    ViewBag.NoContainer = true;
+    JaosDataTools dTools = new JaosDataTools();
+}
+
+
+<style>
+    #divChartStage {
+        padding: 0px !important;
+    }
+
+    #map {
+        height: 50vh;
+    }
+</style>
+
+
+<section class="py-3 bg-plain">
+    <div class="container">
+
+        <!-- MAIN INFO -->
+        <div class="banner-main-info p-0">
+            <div class="banner-main-title py-1 mb-0">
+                <h1 class="mainTit_t1 mb-0">Tablero de Gestión de Proyectos</h1>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!--LISTADO DE PROYECTOS-->
+<section class="dashboard">
+
+    <!--FILTROS-->
+    <form asp-action="Index" method="post">
+        <div class="container-full bg-soft-gray">
+            <div class="filter-H p-4 mb-4">
+                <div class="row justify-content-center align-items-center">
+                    <!--AREA-->
+                    <div class="form-group col-lg-3 col-md-4">
+                        <div class="form-group subtitle">
+                            <label class="form-label" asp-for="Office">Área responsable:</label>
+                            <select asp-for="Office" class="form-select selectSector" aria-label="Seleccione Area:" asp-items="ViewBag.listOffice" id="Office" name="Office">
+                            </select>
+                        </div>
+                    </div>
+                    <!--SECTOR-->
+                    <div class="form-group col-lg-3 col-md-4">
+                        <div class="form-group subtitle">
+                            <label asp-for="Sector">Sector:</label>
+                            <select asp-for="Sector" name="Sector" class="form-select" asp-items="ViewBag.listSector" id="Sector"></select>
+                        </div>
+                    </div>
+                    <!--SUBSECTOR-->
+                    <div class="form-group col-lg-3 col-md-4">
+                        <div class="form-group subtitle">
+                            <label asp-for="Subsector">Subsector:</label>
+                            <select asp-for="Subsector" name="Subsector" class="form-select selectSector" asp-items="ViewBag.listSubsector" id="Subsector"></select>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <div class="action-btonera">
+                            <button type="submit" formnovalidate class="btn btn-outline-light"><i class="bi bi-search"></i>&nbsp; Buscar</button>
+                            <a href="" class="btn btn-link"> Limpiar</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+
+    <div class="container-fluid mb-3">
+
+        <div class="row mb-4">
+            <!--MAP CONTAINER-->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div id="map" class="full-map-container">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4 data-general">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4">
+                                        <h3>Proyectos no iniciados</h3>
+                                        <div class="wrap-data">
+                                            <span class="h3">@dTools.display(Model.Total?.NotStartedProjectsCount)</span>
+                                            <span class="label-dato">Proyectos</span>
+                                            <div class="clearfix"></div>
+                                            <span class="h3">@dTools.display(Model.Total?.NotStartedProjectsValue, "n1")</span>
+                                            <span class="label-dato">Costo total ($')</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 sepV-l">
+                                        <h3>Proyectos en ejecución</h3>
+                                        <div class="wrap-data">
+                                            <span class="h3">@dTools.display(Model.Total?.OngoingProjectsCount)</span>
+                                            <span class="label-dato">Proyectos</span>
+                                            <div class="clearfix"></div>
+                                            <span class="h3">@dTools.display(Model.Total?.OngoingProjectsCost, "n1")</span>
+                                            <span class="label-dato">Costo total ($')</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <h3>Proyectos terminados</h3>
+                                        <div class="wrap-data">
+                                            <span class="h3">@dTools.display(Model.Total?.FinishedProjectsCount)</span>
+                                            <span class="label-dato">Proyectos</span>
+                                            <div class="clearfix"></div>
+                                            <span class="h3">@dTools.display(Model.Total?.FinishedProjectsCost, "n1")</span>
+                                            <span class="label-dato">Costo total ($')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Proyectos por estado</h3>
+                                <div class="row">
+                                    <div id="divChartStage" class="col-lg-6 col-md-12 col-sm-12"></div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <div class="wrap-data">
+                                            <span class="h3">@dTools.display(Model.Total?.TotalCostOfAllProducts, "n1")</span>
+                                            <span class="label-dato">Costo estimado ($'000'000)</span>
+                                            <div class="clearfix"></div>
+                                            <span class="h3">@dTools.display(Model.Total?.TotalPayedValue, "n1")</span>
+                                            <span class="label-dato">Pagado ($'000'000)</span>
+                                            <div class="clearfix"></div>
+                                            <span class="h3">@dTools.display(Model.Total?.TotalRemainingValue, "n1")</span>
+                                            <span class="label-dato">Saldo ($'000'000)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--TABLE PENDIENTES-->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="p-3">
+                                <div class="table-responsive">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Pendientes</th>
+                                                <th>Cantidad</th>
+                                                <th>Monto (M$)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Pagos</td>
+                                                <td>@dTools.display(Model.Total?.PendingPaymentsCount)</td>
+                                                <td>@dTools.display(Model.Total?.PendingPaymentsValue / 1000000, "n2")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adiciones</td>
+                                                <td>@dTools.display(Model.Total?.PendingAdditionsCount)</td>
+                                                <td>@dTools.display(Model.Total?.PendingAdditionsValue / 1000000, "n2")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Extensiones</td>
+                                                <td>@dTools.display(Model.Total?.PendingExtensionsCount)</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card data-general">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="p-3">
+                                    <h3>Proyectos finalizados por año</h3>
+                                    <div id="divChartYears"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 sepV-l">
+                                <div class="p-3">
+                                    <h3>Proyectos en ejecución por avance físico</h3>
+                                    <div class="wrap-graphic"><div id="divChartPhysical"></div></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Proyectos por sector</h3>
+                        <div class="wrap-graphic"><div id="divChartSectors"></div></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<section class="bg-plain">
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="form-group mb-3" id="divProject">
+                <form method="post" asp-area="@ParentProjectService.defaultArea" asp-controller="@ParentProjectService.defaultController" asp-action="@ParentProjectService.defaultAction">
+                    <h1 asp-for="project" class="control-label" title="Seleccionar un Proyecto">Consultar un Proyecto</h1>
+                    <select name="id" class="searchableSelect" asp-items="ViewBag.listProject" id="project" onchange="this.form.submit()"></select>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<input name="contractsPerStageChart" id="contractsPerStageChart" value="@ViewBag.contractsPerStageChart" type="hidden" />
+<input name="contractsPerYearChart" id="contractsPerYearChart" value="@ViewBag.contractsPerYearChart" type="hidden" />
+<input name="physicalAdvanceChart" id="physicalAdvanceChart" value="@ViewBag.physicalAdvanceChart" type="hidden" />
+<input name="contractsPerSectorChart" id="contractsPerSectorChart" value="@ViewBag.contractsPerSectorChart" type="hidden" />
+
+
+
+
+<!-- Map Manager -->
+<!-- geocoder: https://github.com/perliedman/leaflet-control-geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" integrity="sha384-gOibXC9S5JpMrpEP0ee6wCSVHjFSEuOzLLzTUmg58qM+mJ1rI8h/aY3lS9YUmo55" crossorigin="anonymous">
+<link rel="stylesheet" href="~/css/L.switchBasemap.css" />
+<script src="~/js/L.switchBasemap.js"></script>
+<script src="~/js/maplib.js"></script>
+
+
+
+
+<!-- Charts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+
+    //     Projects Map
+    if ('@Html.Raw(Model?.Total?.LocationInfo)' != '')
+        displayMap('map'
+            , '@Html.Raw(Model?.Total?.LocationInfo)'
+            , false, @ProjectGlobals.defaultLatitude, @ProjectGlobals.defaultLongitude);
+
+
+    //     Google Charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawConstractsPerStage);
+    google.charts.setOnLoadCallback(drawConstractsPerYear);
+    google.charts.setOnLoadCallback(drawPhysicalAdvance);
+    google.charts.setOnLoadCallback(drawConstractsPerSector);
+
+
+    function drawConstractsPerStage() {
+        var data = google.visualization.arrayToDataTable(
+            JSON.parse(document.getElementById("contractsPerStageChart").value)
+        );
+        var view = new google.visualization.DataView(data);
+
+        var options = {
+            //title: 'Contratos por Estado',
+            is3D: false,
+            pieHole: 0.4,
+            colors: ['#9cc8e3', '#69abd4', '#398fc7', '#0a578a', '#043a5d', '#0c1a5b'],
+
+            legend: { position: 'right' },
+            chartArea: { left: 0 },
+            width: 350,
+            height: 150
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('divChartStage'));
+        chart.draw(view, options);
+    }
+
+    function drawConstractsPerYear() {
+        const chartData = @Html.Raw(ViewBag.contractsPerYearChart);
+        const data = new google.visualization.arrayToDataTable(chartData);
+        var view = new google.visualization.DataView(data);
+
+        view.setColumns([0, 1,
+            {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2]);
+
+        var options = {
+            //            title: "Density of Precious Metals, in g/cm^3",
+            width: 400,
+            height: 200,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('divChartYears'));
+        chart.draw(view, options);
+    }
+
+    function drawPhysicalAdvance() {
+        const chartData = @Html.Raw(ViewBag.physicalAdvanceChart);
+        const data = new google.visualization.arrayToDataTable(chartData);
+        var view = new google.visualization.DataView(data);
+
+        view.setColumns([0, 1,
+            {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2]);
+
+        var options = {
+            //            title: "Density of Precious Metals, in g/cm^3",
+            width: 400,
+            height: 200,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('divChartPhysical'));
+        chart.draw(view, options);
+    }
+
+    function drawConstractsPerSector() {
+        var data = google.visualization.arrayToDataTable(
+            JSON.parse(document.getElementById("contractsPerSectorChart").value)
+        );
+        var view = new google.visualization.DataView(data);
+
+        var options = {
+            is3D: false,
+            pieHole: 0.4,
+            colors: ['#9cc8e3', '#69abd4', '#398fc7', '#0a578a', '#043a5d', '#0c1a5b'],
+            legend: { position: 'right' },
+            width: 400,
+            height: 200
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('divChartSectors'));
+        chart.draw(view, options);
+    }
+
+
+</script>
+<script>
+    // Subsector loaded based on selected Sector
+    $(function () {
+
+        // filter Subsector based on Sector selection
+        var showSubsector = function (selectedSector) {
+            var parentList = JSON.parse('@Html.Raw(@ViewBag.listSubsectorParent)');
+            $('#Subsector option').hide(); // hide all
+
+            // show children of selected parent
+            $('#Subsector').find('option').filter(function () {
+                return (parentList.find(e => ($(this).val() === '0') || ((e.id === $(this).val()) && (e.parentId === selectedSector))));
+            }).show();
+            //set current value
+            var defaultValue = $('#Subsector').val();
+            if (!parentList.find(e => (e.id === defaultValue && e.parentId === selectedSector)))
+                defaultValue = '0';
+            $('#Subsector').val(defaultValue);
+        };
+        //set default Subsector
+        showSubsector($('#Sector').val());
+
+        //on sector update options for subsector
+        $('#Sector').change(function () {
+            showSubsector($(this).val());
+        });
+
+
+    });
+</script>
+
+
+

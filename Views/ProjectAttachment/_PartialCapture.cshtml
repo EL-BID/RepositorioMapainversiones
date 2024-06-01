@@ -1,0 +1,85 @@
+@using IMRepo.Models.Domain;
+@model ProjectAttachment
+@using IMRepo.Utilities;
+@{
+    ViewData["ModelTitle"] = ModelsTexts.ProjectAttachment.title;
+    var isEditable = (bool)(ViewData["UpdateAvailable"] ?? false);
+}
+
+<form id="FormProjectAttachment" asp-action=@ViewData["Action"] class="mt-2" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl"enctype="multipart/form-data">
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_ResultMessages.cshtml",ViewData)
+    <!-- CAPTURE PROJECTATTACHMENT PROPERTIES -->
+    @if ((int)(ViewData["ModelId"] ?? 0) > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+    </div>
+    <div class="row">
+        @Html.HiddenFor(m => m.Project)
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div  class="form-control"id="divTitle">
+                <label asp-for="Title" class="control-label" title=@ModelsTexts.ProjectAttachment.TitleDescription></label>
+                <input asp-for="Title" type="text" >
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-control" id="divFileName">
+                <label asp-for="FileName"  class="control-label"title=@ModelsTexts.ProjectAttachment.FileNameDescription></label>
+                @if (string.IsNullOrEmpty(Model.FileName))
+                {
+                    <input hidden id="FileNameInput" asp-for="FileNameInput" type="file" />
+                    <div class="input-group mb-3">
+                        <label id="FileNameButton" asp-for="FileNameInput" class="btn btn-outline-secondary" type="button"><i class="bi bi-upload"></i>&nbsp; Cargar Archivo</label>
+                        <input readonly id="FileName" asp-for="FileName" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    </div>
+                }
+                else
+                {
+                    <input hidden id="FileName" asp-for="FileName" type="text" class="form-control" placeholder="(sin archivo seleccionado)">
+                    <div class="input-group mb-3">
+                        <a class="btn btn-link" asp-area="" asp-controller="ProjectAttachment" asp-action="Download" asp-route-serverFileName="@Model.FileName" asp-route-downloadName=@ModelsTexts.ProjectAttachment.FileNameTitle asp-route-projectId=@ViewBag.projectId>
+                            <i class="bi-download"></i>&nbsp; Descargar
+                        </a>
+                    </div>
+                }
+                <span asp-validation-for="FileName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <div  class="form-control"id="divDateAttached">
+                <label asp-for="DateAttached" class="control-label" title=@ModelsTexts.ProjectAttachment.DateAttachedDescription></label>
+                <input asp-for="DateAttached" type="date"  readonly>
+                <span asp-validation-for="DateAttached" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <!-- capture projectattachment properties -->
+    <span data-model="ProjectAttachment"></span>
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_FormFooter.cshtml",ViewData)
+</form>
+<!-- end of projectattachment form -->
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
+
+<script>
+    @* Disable capture fields to Display ProjectAttachment *@
+    const x = @((!isEditable).ToString().ToLower());
+    document.getElementById('Project').disabled = x;
+    document.getElementById('Title').disabled = x;
+    document.getElementById('FileName').disabled = x;
+    document.getElementById('DateAttached').disabled = x;
+</script>
+<!-- Attachments Manager for ProjectAttachment -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set listeners to display filename and button title.
+        setListeners('FileNameInput', 'FileName', 'FileNameButton');
+    });
+</script>

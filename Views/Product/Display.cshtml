@@ -1,0 +1,10 @@
+@model IMRepo.Models.Domain.Product
+@{
+    ViewData["Title"] = string.Format(JaosUITitles.titleDisplay, ModelsTexts.Product.title);
+    ViewData["UpdateAvailable"] = false;
+    ViewBag.WorkingInProject = true;
+    ViewData["isBasicView"] = true;
+}
+
+
+@await Html.PartialAsync("/Views/Product/_PartialCapture.cshtml", ViewData)

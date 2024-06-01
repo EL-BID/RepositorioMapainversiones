@@ -1,0 +1,71 @@
+@using IMRepo.Models.Domain;
+@model IEnumerable<IMRepo.Models.Domain.Product>?
+@{
+    ViewData["Title"] = "Productos";
+    ViewBag.WorkingInProject = true;
+}
+
+<form asp-action="Index" asp-controller="Product" method="get" asp-route-returnUrl="@ViewBag.returnUrl" asp-route-bufferedUrl="@ViewBag.bufferedUrl" >
+    @await Html.PartialAsync("/Views/Shared/JaosLib/_SearchBox.cshtml", Model?.Count(), ViewData)
+    <a asp-area="" asp-controller="Product"  asp-action="Create" asp-route-projectId=@ViewBag.projectId class="btn btn-clear float-end" asp-route-bufferedUrl=@ViewBag.returnUrl><i class="bi-plus"></i> Crear  Producto</a>
+    @if (Model != null && Model.Any())
+    {
+
+        <!-- select Product table -->
+        <table class="table select-table">
+            <caption>Tabla para seleccionar Producto</caption>
+            <thead>
+                <tr>
+                    <th>
+                        <a href=@Url.Action("Index", "Product", new { sortOrder = @ViewBag.nameSort})>
+                            @Html.DisplayNameForInnerType((Product s) => s.Name) <i class=@ViewBag.nameIcon></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href=@Url.Action("Index", "Product", new { sortOrder = @ViewBag.costSort})>
+                            @Html.DisplayNameForInnerType((Product s) => s.Cost) <i class=@ViewBag.costIcon></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Count() > 0)
+                {
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@product.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => product.Name)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@product.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl>
+                                    @Html.DisplayFor(modelItem => product.Cost)
+                                </a>
+                            </td>
+                            <td class="sel-row">
+                                <a asp-action="Edit" asp-route-id="@product.Id" asp-route-projectId=@ViewBag.projectId asp-route-bufferedUrl=@ViewBag.returnUrl class="btn nav-link">
+                                    <i class="bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @if (string.IsNullOrEmpty(ViewBag.searchText))
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchListEmpty,ModelsTexts.Product.titlePlural)</h3>
+        }
+        else
+        {
+            <h3 class="alert">@string.Format(JaosUITitles.searchResultEmpty, ModelsTexts.Product.titlePlural, @ViewBag.searchText)</h3>
+        }
+    }
+</form>
+@await Html.PartialAsync("/Views/Shared/JaosLib/_ListViewFooter.cshtml",ViewData)
