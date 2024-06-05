@@ -6,7 +6,7 @@ El Repisotorio MapaInversiones pone a disposición de los gobiernos subnacionale
 
 *a.* Mejorar la trasparencia y rendición de cuentas sobre el uso de recursos públicos.
 
-*b.* Fortalecer la eficiencia en la ejecución de recursos públicos.
+*b.* Fortalecer la eficiencia en la ejecución de proyectos de inversión pública.
 
 *c.* Brindar appoyo a la toma de decisiones basadas en datos.
 
