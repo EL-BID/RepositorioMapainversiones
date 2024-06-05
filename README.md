@@ -4,11 +4,11 @@
 
 El Repisotorio MapaInversiones pone a disposición de los gobiernos subnacionales un Repositorio de Proyectos de Inversión Pública con los siguientes objetivos:
 
-*a.* Facilitar y mejorar la gestión de proyectos de inversión pública con una base de datos que consolide todos los proyectos de la entidad gubernamental.
+*a.* Mejorar la trasparencia y rendición de cuentas sobre el uso de recursos públicos.
 
-*b.* Optimizar la ejecución de recursos de inversión publica de los gobiernos subnacionales brindando una herramienta que apoye la optimización de recursos y facilite la identificación de riesgos.
+*b.* Fortalecer la eficiencia en la ejecución de recursos públicos.
 
-*c.* Fortalecer la toma de decisiones con una herramienta que apoye la toma de decisiones basadas en datos e incremente la transparencia.
+*c.* Brindar appoyo a la toma de decisiones basadas en datos.
 
 
 ## Conceptos básicos
