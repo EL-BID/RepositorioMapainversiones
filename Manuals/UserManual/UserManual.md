@@ -33,11 +33,11 @@ Para cerrar estas brechas y fomentar el desarrollo local, el BID ofrece una herr
 Los objetivos de esta solución incluyen:
 
 - Facilitar y mejorar la gestión de proyectos de inversión pública mediante una base de datos que consolide todos los proyectos de las entidades gubernamentales.
-- Optimizar la ejecución de recursos de inversión pública en los gobiernos subnacionales, proporcionando una herramienta que apoye la optimización de recursos y facilite la identificación de riesgos.
-- Facilitar la integración de datos, la visualización y las capacidades analíticas para apoyar la toma de decisiones basada en datos y la evaluación del impacto en varios niveles de gobierno.
+- Optimizar la ejecución de recursos de inversión pública en los gobiernos subnacionales, proporcionando una herramienta que facilite el seguimiento y la identificación de riesgos.
+- Fortalecer la integración de datos, la visualización y las capacidades analíticas para apoyar la toma de decisiones basada en datos y la evaluación de resultados.
 - Mejorar la divulgación de información sobre la inversión pública gracias a la interoperabilidad con las plataformas de transparencia de MapaInversiones.
 
-Esta solución permite a los gobiernos locales enfocarse en superar los retos estratégicos en lugar de los técnicos y es escalable según sea necesario, adaptándose a los requisitos cambiantes y a la evolución de las necesidades de cada gobierno. El Repositorio MapaInversiones es una herramienta que ayudará a las instituciones públicas subnacionales a reducir y/o eliminar las barreras y desafíos en la transformación digital.
+Esta solución permite a los gobiernos locales enfocarse en superar los retos estratégicos en lugar de los técnicos y es escalable según sea necesario, adaptándose a los requisitos cambiantes y a la evolución de las necesidades de cada gobierno. 
 
 
 
