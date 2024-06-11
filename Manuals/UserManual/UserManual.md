@@ -6,10 +6,7 @@
 
 
 
-El Repositorio MapaInversiones es un sistema de información para el registro y seguimiento del portafolio de proyectos de inversión pública en gobiernos subnacionales.
-
-
-Es una herramienta gratuita y de código abierto que provee la información necesaria para alimentar MapaInversiones.
+El Repositorio MapaInversiones es un sistema de información para mejorar la transparencia y rendición de cuentas de gobiernos subnacionales mediante el registro y seguimiento del portafolio de proyectos de inversión pública. Es una herramienta gratuita y de código abierto que provee la capacidad para alimentar de forma segura y automática a la plataforma MapaInversiones.
 
 
 
@@ -17,14 +14,7 @@ Es una herramienta gratuita y de código abierto que provee la información nece
 
 # Introducción
 
-
-Las instituciones públicas, en sus diversos niveles de gobierno, desempeñan un papel crucial en la planificación, financiamiento, ejecución y supervisión de las inversiones públicas. Sin embargo, en este proceso, surgen frecuentemente desafíos técnicos, económicos, administrativos y políticos que dificultan la implementación de las mejores prácticas. Superar estos desafíos es esencial para promover el desarrollo sostenible, fortalecer la confianza ciudadana en las instituciones y asegurar el uso óptimo de los fondos públicos en beneficio de toda la comunidad.
-
-
-Las herramientas tecnológicas ofrecen a los gobiernos la capacidad de gestionar sus proyectos de inversión pública de manera eficiente, garantizar la transparencia y fomentar la participación ciudadana en la toma de decisiones. Un ejemplo destacado es MapaInversiones, una iniciativa del Banco Interamericano de Desarrollo (BID) presente en 14 países de América Latina y el Caribe. Esta iniciativa promueve la transparencia en el gasto, las inversiones y las contrataciones públicas mediante plataformas digitales que integran y visualizan datos públicos. MapaInversiones actúa como una ventana visible de los datos publicados por entidades nacionales y territoriales en los bancos de proyectos de los Sistemas Nacionales de Inversión Pública (SNIP), entre otras fuentes oficiales. No obstante, a nivel subnacional, la adopción de sistemas de información que permiten la recopilación, análisis y difusión de datos en tiempo real varía considerablemente.
-
-
-Para cerrar estas brechas y fomentar el desarrollo local, el BID ofrece una herramienta tecnológica libre, gratuita y de código abierto diseñada para mejorar los sistemas y fuentes de datos existentes sin sustituirlos. El Repositorio MapaInversiones es una aplicación web que automatiza la entrada de datos, limpia los datos existentes y genera información organizada y accesible para los tomadores de decisiones mediante interfaces intuitivas, componentes reutilizables y plantillas preconstruidas. Esto permite un rápido despliegue de aplicaciones sin necesidad de amplios conocimientos de desarrollo de software. El Repositorio puede personalizarse y adaptarse a las necesidades específicas de cada gobierno, y la información puede resguardarse en servidores locales o en la nube, según la decisión de cada entidad. La licencia de este software permite a los usuarios reproducir, distribuir, ejecutar públicamente, prestar, poner a disposición del público y modificar el software libremente.
+Las herramientas tecnológicas ofrecen a los gobiernos la capacidad de fortalecer la transparencia y rendición de cuentas a la ciudadanía sobre el uso de los recursos públicos. Un ejemplo destacado es MapaInversiones, una iniciativa del Banco Interamericano de Desarrollo (BID) presente en 14 países de América Latina y el Caribe. Esta iniciativa promueve la transparencia en el gasto, las inversiones y las contrataciones públicas mediante plataformas digitales que integran y visualizan datos públicos. MapaInversiones actúa como una ventana visible de los datos públicos que son gestionados en sistemas de información oficiales por entidades nacionales y territoriales. No obstante, a nivel subnacional, la adopción de sistemas de información que permiten la recopilación, análisis y difusión de datos en tiempo real varía considerablemente. Para cerrar estas brechas y fortalecer la transparencia a nivel subnacional, el BID pone a disposición una herramienta tecnológica libre, gratuita y de código abierto diseñada para complementar los sistemas y fuentes de datos existentes sin sustituirlos. El Repositorio MapaInversiones es una aplicación web que automatiza la entrada de datos, ordena los datos existentes y genera información accesible para los tomadores de decisión mediante interfaces intuitivas, componentes reutilizables y plantillas preconstruidas. Este enfoque permite un rápido despliegue con posibilidades de personalización y adaptación a las necesidades específicas de cada gobierno. Además la información puede resguardarse en servidores locales o en la nube, según la decisión de la entidad que implemente la herramienta.
 
 
 
@@ -32,12 +22,10 @@ Para cerrar estas brechas y fomentar el desarrollo local, el BID ofrece una herr
 
 Los objetivos de esta solución incluyen:
 
-- Facilitar y mejorar la gestión de proyectos de inversión pública mediante una base de datos que consolide todos los proyectos de las entidades gubernamentales.
-- Optimizar la ejecución de recursos de inversión pública en los gobiernos subnacionales, proporcionando una herramienta que facilite el seguimiento y la identificación de riesgos.
-- Fortalecer la integración de datos, la visualización y las capacidades analíticas para apoyar la toma de decisiones basada en datos y la evaluación de resultados.
-- Mejorar la divulgación de información sobre la inversión pública gracias a la interoperabilidad con las plataformas de transparencia de MapaInversiones.
-
-Esta solución permite a los gobiernos locales enfocarse en superar los retos estratégicos en lugar de los técnicos y es escalable según sea necesario, adaptándose a los requisitos cambiantes y a la evolución de las necesidades de cada gobierno. 
+- Fortalecer las capacidades de los gobiernos subnacionales para impulsar políticas de transparencia e integridad.
+- Brindar una solución para alimentar de forma segura y automática a la plataforma MapaInversiones mediante una base de datos que consolide todos los proyectos de inversión pública.
+- Fortalecer la integración de datos, la visualización y las capacidades analíticas para apoyar el seguimiento del portafolio de proyectos.
+- Mejorar la divulgación de información y rendición de cuentas a la ciudadanía sobre el uso de los recursos públicos, las decisiones de inversión pública y el avance de los proyectos.
 
 
 
