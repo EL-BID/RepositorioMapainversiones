@@ -1,4 +1,4 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EL-BID_RepositorioMapaInversiones&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EL-BID_RepositorioMapaInversiones)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EL-BID_RepositorioMapainversiones&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EL-BID_RepositorioMapainversiones)
 
 # Repositorio MapaInversiones
 
