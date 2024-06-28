@@ -52,7 +52,7 @@ Durante la ejecución del proyecto el sistema registra pagos, adiciones de costo
 
 Para todos los usuarios autorizados, adicional al tablero de control del portafolio y al tablero de resumen del proyecto, ofrece una serie de reportes relacionados con los proyectos y sus pagos, adiciones y extensiones.
 
-El Manual de Usario se puede descargar en  [Manual de Usuario](https://github.com/EL-BID/RepositorioMapaInversiones/blob/main/Manuals/UserManual/UserManual.md).
+El Manual de Usuario se puede descargar en  [Manual de Usuario](https://github.com/EL-BID/RepositorioMapaInversiones/blob/main/Manuals/UserManual/UserManual.md).
 
 
 #### Usuario
