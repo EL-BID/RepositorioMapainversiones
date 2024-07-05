@@ -97,6 +97,8 @@ Aquí puede ver el  [Manual de Usuario](https://github.com/EL-BID/RepositorioMap
 
 Esta herramienta tiene su base de datos creada en Microsoft SQL Server 2019. La base datos se puede descargar de [MapaInversionesC4D](https://github.com/EL-BID/RepositorioMapaInversiones/blob/main/DeploymentDbModel/InvestmentMapRepositoryC4D.zip) y cargarla en el servidor de base de datos que se configure para su publicación. 
 
+Adicionalmente se puede encontrar una base de datos con datos sintéticos en: [IMRepo Synthetic Data Database](https://github.com/EL-BID/RepositorioMapaInversiones/blob/main/DeploymentDbModel/IM Repository Synthetic Data Database.sql)
+
 Pasos para la instalación y configuración de la base de datos:
 Restaurar el backup de la base de datos.
 Actualizar la cadena de conexión en el código del sistema.
