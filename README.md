@@ -1,7 +1,7 @@
 
 # Repositorio MapaInversiones
 
-El Repisotorio MapaInversiones pone a disposición de los gobiernos subnacionales un Repositorio de Proyectos de Inversión Pública con los siguientes objetivos:
+El Repositorio MapaInversiones se pone a disposición de los gobiernos con los siguientes objetivos:
 
 *a.* Mejorar la trasparencia y rendición de cuentas sobre el uso de recursos públicos.
 
