@@ -2,7 +2,7 @@
 Effective: December 2025 Page Content
 
 The “Software” (as defined below), with the exception of the Support and Use Documentation (the “Documentation”), shall be subject to the following terms and conditions, which shall be packaged as part of each Software under a file named “LICENSE”:
-“Copyright © [year]. Inter-American Development Bank (“IDB”). Authorized Use.”
+“Copyright © [2025]. Inter-American Development Bank (“IDB”). Authorized Use.”
 
 ### 1. License
 Through this non-exclusive, worldwide, royalty-free license (“License”), the IDB grants permission to the user (“User”) to reproduce, distribute, publicly perform, lend, make available to the public, and modify the Software and its modifications, individually or as part of a collection, for commercial and non-commercial purposes, subject to the terms and conditions set forth herein. Unless otherwise indicated, the Software Documentation will be licensed under the Creative Commons CC-BY 4.0 license, or the license that the Creative Commons Organization designates as its successor.
